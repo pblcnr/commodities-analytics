@@ -6,7 +6,7 @@
 commodities-analytics
 
 ### Protótipo Figma
-https://www.figma.com/make/hXcrMvFtmMEEvCYqBE2707/AgroPrice-Insight-Prototype?t=iyKpS75bVTxp2KNh-0
+https://www.figma.com/make/hXcrMvFtmMEEvCYqBE2707/commodities-analytics?p=f&t=iiCffaQVCGoPHZs5-0&fullscreen=1
 
 ### Resumo
 O commodities-analytics e um software web e mobile para apoiar a decisao de compra de materias-primas agricolas com base em dados historicos da CONAB e previsoes geradas por IA. O sistema analisa a tendencia de preco de materias-primas selecionadas e informa ao comprador se o momento atual de compra e bom, regular ou ruim.
@@ -328,13 +328,13 @@ Se nao houver atualizacao recente dos dados, o sistema pode operar inicialmente 
 ## 16. Arquitetura Sugerida
 
 ### Frontend web
-- React ou Next.js
+- Next.js
 
 ### Aplicativo mobile
 - React Native com Expo
 
 ### Backend
-- Node.js com NestJS ou Express, expondo uma API unica para web e mobile
+- NestJS (Node.js), expondo uma API unica para web e mobile
 
 ### Banco de dados
 - PostgreSQL
