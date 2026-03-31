@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { AlertModel, getAlerts, toggleAlertStatus, deleteAlert, getCommodities, Commodity } from "@/services/mockData";
 import Link from "next/link";
+import { SiTelegram, SiWhatsapp, SiGmail } from "react-icons/si";
 import "./alerts.css";
 
 export default function AlertsPage() {
@@ -123,10 +124,10 @@ export default function AlertsPage() {
                     </div>
                     
                     <div className="alert-channel-info">
-                      <span className="icon">
-                        {alert.channel === "Telegram" ? "✈️" : 
-                         alert.channel === "WhatsApp" ? "💬" : 
-                         alert.channel === "E-mail" ? "📧" : "📱"}
+                      <span className="icon" style={{ display: 'flex', alignItems: 'center' }}>
+                        {alert.channel === "Telegram" ? <SiTelegram color="#26A5E4" /> : 
+                         alert.channel === "WhatsApp" ? <SiWhatsapp color="#25D366" /> : 
+                         alert.channel === "E-mail" ? <SiGmail color="#EA4335" /> : "📱"}
                       </span> via {alert.channel}
                     </div>
 

@@ -1,6 +1,7 @@
 import { getCommodityById } from "@/services/mockData";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import CommodityChart from "@/components/CommodityChart";
 import "../commodity-detail.css";
 
 // This is necessary since Next 15 Dynamic Route Params are promises.
@@ -68,26 +69,11 @@ export default async function CommodityDetailPage({ params }: { params: Params }
         </div>
 
         <div className="card chart-card">
-          <h3>Histórico de Preços (Últimos 3 meses)</h3>
-          <div className="chart-container">
-            {/* Simple CSS-based bar chart for MVP mockup */}
-            <div className="bar-chart">
-              {commodity.history.map((point, index) => {
-                const maxPrice = Math.max(...commodity.history.map(h => h.price)) * 1.1;
-                const heightPercent = (point.price / maxPrice) * 100;
-                
-                return (
-                  <div key={index} className="bar-wrapper">
-                    <div className="bar">
-                      <div className="bar-fill" style={{ height: `${heightPercent}%` }}></div>
-                      <div className="bar-tooltip">R$ {point.price.toFixed(2)}</div>
-                    </div>
-                    <div className="bar-label">{point.date}</div>
-                  </div>
-                );
-              })}
-            </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3>Histórico de Preços (Últimos 3 meses)</h3>
+            <span className="badge good" style={{ fontSize: '0.8rem', background: 'rgba(0, 198, 255, 0.1)', color: '#00c6ff', border: '1px solid rgba(0, 198, 255, 0.2)' }}>Gráfico Evolutivo</span>
           </div>
+          <CommodityChart data={commodity.history} unit={commodity.unit} />
         </div>
       </div>
     </div>

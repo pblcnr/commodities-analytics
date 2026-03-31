@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Commodity, getCommodities, createAlert } from "@/services/mockData";
 import Link from "next/link";
+import { SiTelegram, SiWhatsapp, SiGmail } from "react-icons/si";
 import "../alerts.css";
 
 export default function NewAlertPage() {
@@ -139,18 +140,58 @@ export default function NewAlertPage() {
           )}
 
           <div className="modern-input-group full-width">
-            <label htmlFor="channel">Receber por</label>
-            <div className="select-wrapper">
-              <select 
-                id="channel"
-                value={channel} 
-                onChange={e => setChannel(e.target.value)}
+            <label>Receber por</label>
+            <div className="channels-group" style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+              <button 
+                type="button" 
+                onClick={() => setChannel('Telegram')}
                 disabled={isSubmitting}
+                style={{ 
+                  flex: 1, padding: '1rem', borderRadius: 'var(--radius-md)', 
+                  border: `2px solid ${channel === 'Telegram' ? '#26A5E4' : 'var(--border-color)'}`, 
+                  background: channel === 'Telegram' ? 'rgba(38, 165, 228, 0.05)' : 'var(--bg-surface)', 
+                  cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', 
+                  color: 'var(--text-primary)', transition: 'all 0.2s',
+                  boxShadow: channel === 'Telegram' ? '0 4px 12px rgba(38, 165, 228, 0.15)' : 'none'
+                }}
               >
-                <option value="Telegram">✈️ Telegram (Recomendado)</option>
-                <option value="E-mail">📧 E-mail</option>
-                <option value="WhatsApp">💬 WhatsApp</option>
-              </select>
+                <SiTelegram size={24} color={channel === 'Telegram' ? '#26A5E4' : 'var(--text-secondary)'} />
+                <span style={{ fontSize: '0.85rem', fontWeight: channel === 'Telegram' ? '700' : '500' }}>Telegram</span>
+              </button>
+              
+              <button 
+                type="button" 
+                onClick={() => setChannel('WhatsApp')}
+                disabled={isSubmitting}
+                style={{ 
+                  flex: 1, padding: '1rem', borderRadius: 'var(--radius-md)', 
+                  border: `2px solid ${channel === 'WhatsApp' ? '#25D366' : 'var(--border-color)'}`, 
+                  background: channel === 'WhatsApp' ? 'rgba(37, 211, 102, 0.05)' : 'var(--bg-surface)', 
+                  cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', 
+                  color: 'var(--text-primary)', transition: 'all 0.2s',
+                  boxShadow: channel === 'WhatsApp' ? '0 4px 12px rgba(37, 211, 102, 0.15)' : 'none'
+                }}
+              >
+                <SiWhatsapp size={24} color={channel === 'WhatsApp' ? '#25D366' : 'var(--text-secondary)'} />
+                <span style={{ fontSize: '0.85rem', fontWeight: channel === 'WhatsApp' ? '700' : '500' }}>WhatsApp</span>
+              </button>
+
+              <button 
+                type="button" 
+                onClick={() => setChannel('E-mail')}
+                disabled={isSubmitting}
+                style={{ 
+                  flex: 1, padding: '1rem', borderRadius: 'var(--radius-md)', 
+                  border: `2px solid ${channel === 'E-mail' ? '#EA4335' : 'var(--border-color)'}`, 
+                  background: channel === 'E-mail' ? 'rgba(234, 67, 53, 0.05)' : 'var(--bg-surface)', 
+                  cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', 
+                  color: 'var(--text-primary)', transition: 'all 0.2s',
+                  boxShadow: channel === 'E-mail' ? '0 4px 12px rgba(234, 67, 53, 0.15)' : 'none'
+                }}
+              >
+                <SiGmail size={24} color={channel === 'E-mail' ? '#EA4335' : 'var(--text-secondary)'} />
+                <span style={{ fontSize: '0.85rem', fontWeight: channel === 'E-mail' ? '700' : '500' }}>E-mail</span>
+              </button>
             </div>
           </div>
 
