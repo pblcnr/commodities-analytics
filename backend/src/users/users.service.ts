@@ -1,7 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserInternalDto } from './dto/create-user.dto';
 import { User } from './user.entity';
+import { AuthMessageDto } from 'src/auth/dto/auth-response.dto';
 
 @Injectable()
 export class UsersService {
@@ -18,21 +19,20 @@ export class UsersService {
     return this.users.find((user) => user.id === id);
   }
 
-  async create(dto: CreateUserDto, passwordHash: string): Promise<User> {
-    const emailInUse = await this.findByEmail(dto.email);
+  async create(user: CreateUserInternalDto): Promise<AuthMessageDto> {
+    const emailInUse = await this.findByEmail(user.email);
     if (emailInUse) {
       throw new ConflictException('Email already in use');
     }
-    const user: User = {
+    const userCreate: User = {
+      ...user,
       id: randomUUID(),
-      name: dto.name,
-      email: dto.email,
-      passwordHash,
       isActive: true,
       createdAt: new Date(),
     };
+
     // TODO: this.prisma.user.create({ data: user })
-    this.users.push(user);
-    return user;
+    this.users.push(userCreate);
+    return { message: 'User created successfully' };
   }
 }

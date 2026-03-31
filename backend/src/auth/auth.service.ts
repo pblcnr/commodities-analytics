@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
-import { AuthResponseDto } from './dto/auth-response.dto';
+import { AuthResponseDto,AuthMessageDto } from './dto/auth-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -30,15 +30,19 @@ export class AuthService {
   async login(user: User): Promise<AuthResponseDto> {
     const payload = { sub: user.id, email: user.email };
     return {
-      accessToken: this.jwtService.sign(payload),
-      user: { id: user.id, name: user.name, email: user.email },
+      accessToken: this.jwtService.sign(payload)
     };
   }
 
-  async register(dto: CreateUserDto): Promise<AuthResponseDto> {
+  async register(user: CreateUserDto): Promise<AuthMessageDto> {
+    const { password, ...userData } = user; 
     const SALT_ROUNDS = 10;
-    const passwordHash = await bcrypt.hash(dto.password, SALT_ROUNDS);
-    const user = await this.usersService.create(dto, passwordHash);
-    return this.login(user);
+    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    
+    const userToCreate = {
+      ...userData,
+      passwordHash
+    }
+    return await this.usersService.create(userToCreate);
   }
 }
