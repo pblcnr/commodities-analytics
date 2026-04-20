@@ -1,7 +1,7 @@
 export const COLORS = {
   light: {
     background: '#f4f7f6',
-    cardBackground: 'rgba(255, 255, 255, 0.7)',
+    cardBackground: '#ffffff',
     textPrimary: '#2c3e50',
     textSecondary: '#7f8c8d',
     primary: '#3498db',
@@ -21,7 +21,7 @@ export const COLORS = {
   },
   dark: {
     background: '#121212',
-    cardBackground: 'rgba(30, 30, 30, 0.7)',
+    cardBackground: '#1b1b1bff',
     textPrimary: '#ffffff',
     textSecondary: '#bdc3c7',
     primary: '#3498db',
