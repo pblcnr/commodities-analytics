@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../src/theme/ThemeContext';
 import { useRouter } from 'expo-router';
 import { getAlerts, AlertModel, deleteAlert, toggleAlertStatus } from '../../src/services/mockData';
 import { Ionicons } from '@expo/vector-icons';
+import { AlertCard } from '../../src/components/features/AlertCard';
 
 export default function AlertsScreen() {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
   const router = useRouter();
   const [alerts, setAlerts] = useState<AlertModel[]>([]);
 
@@ -19,15 +20,19 @@ export default function AlertsScreen() {
     loadAlerts();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = useCallback(async (id: string) => {
     await deleteAlert(id);
     loadAlerts();
-  };
+  }, []);
 
-  const handleToggle = async (id: string) => {
+  const handleToggle = useCallback(async (id: string) => {
     await toggleAlertStatus(id);
     loadAlerts();
-  };
+  }, []);
+
+  const renderItem = useCallback(({ item }: { item: AlertModel }) => (
+    <AlertCard item={item} onToggle={handleToggle} onDelete={handleDelete} />
+  ), [handleToggle, handleDelete]);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -35,32 +40,10 @@ export default function AlertsScreen() {
         data={alerts}
         keyExtractor={item => item.id}
         contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
-        renderItem={({ item }) => (
-          <View style={[styles.card, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
-            <View style={styles.header}>
-              <View>
-                <Text style={[styles.title, { color: colors.textPrimary }]}>{item.commodityName}</Text>
-                <Text style={{ color: colors.textSecondary, marginTop: 4 }}>{item.condition}</Text>
-              </View>
-              <TouchableOpacity onPress={() => handleToggle(item.id)}>
-                <Ionicons 
-                  name={item.active ? "notifications" : "notifications-off"} 
-                  size={24} 
-                  color={item.active ? colors.primary : colors.textSecondary} 
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={[styles.footer, { borderTopColor: colors.border }]}>
-              <View style={styles.channelBadge}>
-                <Ionicons name="chatbubbles" size={14} color={colors.textPrimary} style={{ marginRight: 4 }} />
-                <Text style={{ color: colors.textPrimary, fontSize: 12 }}>{item.channel}</Text>
-              </View>
-              <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                <Ionicons name="trash-outline" size={20} color={colors.badText} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
+        renderItem={renderItem}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        removeClippedSubviews
       />
       <TouchableOpacity 
         style={[styles.fab, { backgroundColor: colors.primary }]}

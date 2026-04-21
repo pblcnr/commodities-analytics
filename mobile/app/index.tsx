@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../src/theme/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
-
+import { useAuthStore } from '../src/stores/useAuthStore';
+import { CustomButton } from '../src/components/ui/CustomButton';
+import { CustomInput } from '../src/components/ui/CustomInput';
 
 export default function LoginScreen() {
   const router = useRouter();
   const { colors, isDark, toggleTheme } = useTheme();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const login = useAuthStore((state) => state.login);
 
-  const handleLogin = () => {
-    // Navigate to tabs
-    router.replace('/(tabs)');
-  };
+  const handleLogin = useCallback(() => {
+    // Simulando login
+    if (email && password) {
+      login('fake-jwt-token', { id: '1', email, name: 'Usuário Teste' });
+      router.replace('/(tabs)');
+    }
+  }, [email, password, login, router]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
@@ -35,42 +43,26 @@ export default function LoginScreen() {
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Previsões inteligentes</Text>
           </View>
 
-          <View style={styles.inputGroup}>
-            <Text style={[styles.label, { color: colors.textPrimary }]}>Email</Text>
-            <TextInput
-              style={[styles.input, {
-                backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : '#ffffff',
-                color: colors.textPrimary,
-                borderColor: colors.border
-              }]}
-              placeholder="seu@email.com"
-              placeholderTextColor={colors.textSecondary}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
+          <CustomInput
+            label="Email"
+            placeholder="seu@email.com"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={[styles.label, { color: colors.textPrimary }]}>Senha</Text>
-            <TextInput
-              style={[styles.input, {
-                backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : '#ffffff',
-                color: colors.textPrimary,
-                borderColor: colors.border
-              }]}
-              placeholder="••••••••"
-              placeholderTextColor={colors.textSecondary}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-          </View>
+          <CustomInput
+            label="Senha"
+            placeholder="••••••••"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
 
-          <TouchableOpacity style={[styles.button, { backgroundColor: colors.primary }]} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Entrar</Text>
-          </TouchableOpacity>
+          <View style={styles.spacer} />
+
+          <CustomButton title="Entrar" onPress={handleLogin} />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -129,31 +121,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  input: {
-    height: 52,
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    fontSize: 16,
-  },
-  button: {
-    height: 56,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 12,
-  },
-  buttonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  spacer: {
+    height: 12,
   }
 });
