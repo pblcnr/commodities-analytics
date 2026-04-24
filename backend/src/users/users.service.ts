@@ -2,6 +2,7 @@ import { ConflictException, Injectable, OnModuleInit } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserInternalDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
 import { AuthMessageDto } from 'src/auth/dto/auth-response.dto';
 
@@ -51,5 +52,42 @@ export class UsersService implements OnModuleInit {
     });
 
     return { message: 'User created successfully' };
+  }
+
+  async findAll() {
+    return this.prisma.usuario.findMany({
+      select: {
+        id_usuario: true,
+        nome: true,
+        email: true,
+        criado_em: true,
+      },
+    });
+  }
+
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const data: any = {};
+    if (updateUserDto.name) data.nome = updateUserDto.name;
+    if (updateUserDto.email) data.email = updateUserDto.email;
+    if (updateUserDto.password) {
+      data.senha_hash = bcrypt.hashSync(updateUserDto.password, 10);
+    }
+    
+    return this.prisma.usuario.update({
+      where: { id_usuario: id },
+      data,
+      select: {
+        id_usuario: true,
+        nome: true,
+        email: true,
+      }
+    });
+  }
+
+  async remove(id: number) {
+    return this.prisma.usuario.delete({
+      where: { id_usuario: id },
+      select: { id_usuario: true }
+    });
   }
 }
