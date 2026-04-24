@@ -1,22 +1,23 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { randomUUID } from 'crypto';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserInternalDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 import { AuthMessageDto } from 'src/auth/dto/auth-response.dto';
 
 @Injectable()
 export class UsersService {
-  // TODO: substituir por repositório do banco de dados
-  private readonly users: User[] = [];
+  constructor(private prisma: PrismaService) {}
 
-  async findByEmail(email: string): Promise<User | undefined> {
-    // TODO: this.prisma.user.findUnique({ where: { email } })
-    return this.users.find((user) => user.email === email);
+  async findByEmail(email: string): Promise<User | null> {
+    return this.prisma.usuario.findUnique({
+      where: { email },
+    });
   }
 
-  async findById(id: string): Promise<User | undefined> {
-    // TODO: this.prisma.user.findUnique({ where: { id } })
-    return this.users.find((user) => user.id === id);
+  async findById(id: number): Promise<User | null> {
+    return this.prisma.usuario.findUnique({
+      where: { id_usuario: id },
+    });
   }
 
   async create(user: CreateUserInternalDto): Promise<AuthMessageDto> {
@@ -24,15 +25,15 @@ export class UsersService {
     if (emailInUse) {
       throw new ConflictException('Email already in use');
     }
-    const userCreate: User = {
-      ...user,
-      id: randomUUID(),
-      isActive: true,
-      createdAt: new Date(),
-    };
 
-    // TODO: this.prisma.user.create({ data: user })
-    this.users.push(userCreate);
+    await this.prisma.usuario.create({
+      data: {
+        nome: user.name,
+        email: user.email,
+        senha_hash: user.passwordHash,
+      },
+    });
+
     return { message: 'User created successfully' };
   }
 }
