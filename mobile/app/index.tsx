@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../src/theme/ThemeContext';
@@ -7,20 +7,31 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '../src/stores/useAuthStore';
 import { CustomButton } from '../src/components/ui/CustomButton';
 import { CustomInput } from '../src/components/ui/CustomInput';
-
+import { loginApi } from '../src/services/auth';
 export default function LoginScreen() {
   const router = useRouter();
   const { colors, isDark, toggleTheme } = useTheme();
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const login = useAuthStore((state) => state.login);
 
-  const handleLogin = useCallback(() => {
-    // Simulando login
-    if (email && password) {
-      login('fake-jwt-token', { id: '1', email, name: 'Usuário Teste' });
+  const handleLogin = useCallback(async () => {
+    if (!email || !password) {
+      Alert.alert('Erro', 'Por favor, preencha email e senha.');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const data = await loginApi(email, password);
+      login(data.accessToken, data.user);
       router.replace('/(tabs)');
+    } catch (error: any) {
+      Alert.alert('Falha no Login', error.message || 'Ocorreu um erro ao tentar conectar.');
+    } finally {
+      setIsLoading(false);
     }
   }, [email, password, login, router]);
 
@@ -62,7 +73,11 @@ export default function LoginScreen() {
 
           <View style={styles.spacer} />
 
-          <CustomButton title="Entrar" onPress={handleLogin} />
+          {isLoading ? (
+            <ActivityIndicator size="large" color={colors.primary} style={{ marginTop: 10 }} />
+          ) : (
+            <CustomButton title="Entrar" onPress={handleLogin} />
+          )}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
