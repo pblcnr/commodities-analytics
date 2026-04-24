@@ -24,3 +24,11 @@ Criar DER e MER das seguintes tabelas:
 -usuários
 -compras
 
+--------------------------------------------------------------------------------
+
+## Documentação do Projeto
+
+- [Especificação Técnica](../spec.md)
+- [Plano de Implementação](../implement.md)
+- [Referência da API](api_reference.md)
+- [Guia de Deploy](deploy_guide.md)
