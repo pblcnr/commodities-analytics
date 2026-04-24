@@ -7,33 +7,36 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '../src/stores/useAuthStore';
 import { CustomButton } from '../src/components/ui/CustomButton';
 import { CustomInput } from '../src/components/ui/CustomInput';
-import { loginApi } from '../src/services/auth';
-export default function LoginScreen() {
+import { registerApi } from '../src/services/auth';
+
+export default function RegisterScreen() {
   const router = useRouter();
   const { colors, isDark, toggleTheme } = useTheme();
   
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const login = useAuthStore((state) => state.login);
 
-  const handleLogin = useCallback(async () => {
-    if (!email || !password) {
-      Alert.alert('Erro', 'Por favor, preencha email e senha.');
+  const handleRegister = useCallback(async () => {
+    if (!name || !email || !password) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos.');
       return;
     }
 
     try {
       setIsLoading(true);
-      const data = await loginApi(email, password);
+      const data = await registerApi(name, email, password);
+      // Automatically log in the user after successful registration
       login(data.accessToken, data.user);
       router.replace('/(tabs)');
     } catch (error: any) {
-      Alert.alert('Falha no Login', error.message || 'Ocorreu um erro ao tentar conectar.');
+      Alert.alert('Falha no Registro', error.message || 'Ocorreu um erro ao tentar registrar.');
     } finally {
       setIsLoading(false);
     }
-  }, [email, password, login, router]);
+  }, [name, email, password, login, router]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
@@ -45,14 +48,23 @@ export default function LoginScreen() {
           <Ionicons name={isDark ? "sunny" : "moon"} size={24} color={colors.textPrimary} />
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+
         <View style={[styles.card, { backgroundColor: colors.cardBackground, shadowColor: isDark ? '#000' : '#888' }]}>
-          <View style={styles.logoContainer}>
-            <View style={[styles.logoIcon, { backgroundColor: colors.primary }]}>
-              <Text style={styles.logoText}>C</Text>
-            </View>
-            <Text style={[styles.title, { color: colors.textPrimary }]}>Commodities Analytics</Text>
-            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Previsões inteligentes</Text>
+          <View style={styles.headerContainer}>
+            <Text style={[styles.title, { color: colors.textPrimary }]}>Criar Conta</Text>
+            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Junte-se ao Commodities Analytics</Text>
           </View>
+
+          <CustomInput
+            label="Nome"
+            placeholder="Seu nome"
+            value={name}
+            onChangeText={setName}
+            autoCapitalize="words"
+          />
 
           <CustomInput
             label="Email"
@@ -76,17 +88,7 @@ export default function LoginScreen() {
           {isLoading ? (
             <ActivityIndicator size="large" color={colors.primary} style={{ marginTop: 10 }} />
           ) : (
-            <>
-              <CustomButton title="Entrar" onPress={handleLogin} />
-              <TouchableOpacity 
-                style={styles.registerContainer} 
-                onPress={() => router.push('/register')}
-              >
-                <Text style={[styles.registerText, { color: colors.textSecondary }]}>
-                  Não tem uma conta? <Text style={[styles.registerTextBold, { color: colors.primary }]}>Cadastre-se</Text>
-                </Text>
-              </TouchableOpacity>
-            </>
+            <CustomButton title="Registrar" onPress={handleRegister} />
           )}
         </View>
       </KeyboardAvoidingView>
@@ -109,6 +111,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: 'rgba(0,0,0,0.05)'
   },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 24,
+    zIndex: 10,
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.05)'
+  },
   card: {
     padding: 32,
     borderRadius: 24,
@@ -119,25 +130,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.1)'
   },
-  logoContainer: {
+  headerContainer: {
     alignItems: 'center',
-    marginBottom: 40,
-  },
-  logoIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  logoText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#ffffff',
+    marginBottom: 32,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
     textAlign: 'center',
     marginBottom: 8,
@@ -148,15 +146,5 @@ const styles = StyleSheet.create({
   },
   spacer: {
     height: 12,
-  },
-  registerContainer: {
-    marginTop: 24,
-    alignItems: 'center',
-  },
-  registerText: {
-    fontSize: 14,
-  },
-  registerTextBold: {
-    fontWeight: 'bold',
   }
 });

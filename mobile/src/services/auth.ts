@@ -17,3 +17,21 @@ export const loginApi = async (email: string, password: string) => {
   const data = await response.json();
   return data; // Expected: { accessToken, user }
 };
+
+export const registerApi = async (name: string, email: string, password: string) => {
+  const response = await fetch(`${API_URL}/auth/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, email, password }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.message || 'Erro ao registrar usuário. Tente novamente.');
+  }
+
+  const data = await response.json();
+  return data; // Expected: { accessToken, user }
+};

@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import "./login.css";
+import "../login.css"; // Reaproveita os estilos do login
 import ThemeToggle from "@/components/ThemeToggle";
-import { login } from "@/services/auth";
+import { register } from "@/services/auth";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,16 +21,12 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const data = await login(email, password);
+      await register(name, email, password);
       
-      // Salva o token localmente (localStorage ou cookies)
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      // Redireciona para o dashboard
-      router.push("/dashboard");
+      // Após registrar com sucesso, redireciona para o login
+      router.push("/");
     } catch (err: any) {
-      setError(err.message || "Erro ao fazer login. Verifique suas credenciais.");
+      setError(err.message || "Erro ao fazer registro. Verifique os dados fornecidos.");
     } finally {
       setLoading(false);
     }
@@ -45,11 +42,22 @@ export default function LoginPage() {
           <div className="logo-icon">C</div>
           <h1>Commodities Analytics</h1>
         </div>
-        <p className="subtitle">Previsões inteligentes de matérias-primas</p>
+        <p className="subtitle">Crie sua conta</p>
         
         {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}
 
         <form className="login-form" onSubmit={handleSubmit}>
+          <div className="input-group">
+            <label htmlFor="name">Nome</label>
+            <input 
+              type="text" 
+              id="name" 
+              placeholder="Seu nome completo" 
+              required 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
           <div className="input-group">
             <label htmlFor="email">Email</label>
             <input 
@@ -73,12 +81,12 @@ export default function LoginPage() {
             />
           </div>
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Entrando..." : "Entrar"}
+            {loading ? "Registrando..." : "Registrar"}
           </button>
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.875rem' }}>
-          Não possui conta? <Link href="/register" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: '500' }}>Registre-se</Link>
+          Já possui conta? <Link href="/" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: '500' }}>Faça login</Link>
         </div>
       </div>
     </main>
