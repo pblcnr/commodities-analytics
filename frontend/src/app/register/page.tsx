@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +22,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await register(name, email, password);
+      await register(name, email, password, phone);
       
       // Após registrar com sucesso, redireciona para o login
       router.push("/");
@@ -78,6 +79,17 @@ export default function RegisterPage() {
               required 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="phone">Telefone</label>
+            <input 
+              type="tel" 
+              id="phone" 
+              placeholder="(11) 99999-9999" 
+              required 
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           </div>
           <button type="submit" className="btn-primary" disabled={loading}>

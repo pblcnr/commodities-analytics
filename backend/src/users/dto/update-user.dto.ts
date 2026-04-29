@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsMobilePhone, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
@@ -10,7 +10,11 @@ export class UpdateUserDto {
   email?: string;
 
   @IsString()
-  @MinLength(8, { message: 'A senha deve ter pelo menos 8 caracteres.' })
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
   @IsOptional()
   password?: string;
+
+  @IsMobilePhone('pt-BR', {}, { message: 'Phone number must be a valid Brazilian number' })
+  @IsOptional()
+  phone?: string;
 }

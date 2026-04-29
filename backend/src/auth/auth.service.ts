@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   async register(user: CreateUserDto): Promise<AuthMessageDto> {
-    const { password, name, email } = user;
+    const { password, name, email, phone } = user;
     const SALT_ROUNDS = 10;
     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
@@ -48,6 +48,7 @@ export class AuthService {
       name,
       email,
       passwordHash,
+      phone,
     });
   }
 
