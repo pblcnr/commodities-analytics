@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AlertModel, getAlerts, toggleAlertStatus, deleteAlert, getCommodities, Commodity } from "@/services/mockData";
+import { AlertModel, getAlerts, toggleAlertStatus, deleteAlert } from "@/services/mockData";
+import { Commodity, getCommodities } from "@/services/commodities";
 import Link from "next/link";
 import { SiTelegram, SiWhatsapp, SiGmail } from "react-icons/si";
 import "./alerts.css";

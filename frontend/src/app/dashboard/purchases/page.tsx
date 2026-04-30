@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Commodity, getCommodities } from "@/services/mockData";
+import { Commodity, getCommodities } from "@/services/commodities";
 import "./purchases.css";
 
 export default function PurchasesPage() {
