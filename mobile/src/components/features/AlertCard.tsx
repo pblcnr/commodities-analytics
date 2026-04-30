@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { AlertModel } from '../../services/mockData';
+import { AlertModel } from '../../services/commodityService';
 import { useTheme } from '../../theme/ThemeContext';
 
 interface Props {

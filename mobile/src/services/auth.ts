@@ -1,4 +1,4 @@
-const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://10.0.2.2:9000/api/v1';
+export const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://10.0.2.2:9000/api/v1';
 
 export const loginApi = async (email: string, password: string) => {
   const response = await fetch(`${API_URL}/auth/login`, {
@@ -18,13 +18,13 @@ export const loginApi = async (email: string, password: string) => {
   return data; // Expected: { accessToken, user }
 };
 
-export const registerApi = async (name: string, email: string, password: string) => {
+export const registerApi = async (name: string, email: string, password: string, phone: string) => {
   const response = await fetch(`${API_URL}/auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ name, email, password }),
+    body: JSON.stringify({ name, email, password, phone }),
   });
 
   if (!response.ok) {

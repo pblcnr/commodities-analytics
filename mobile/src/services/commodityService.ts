@@ -19,7 +19,7 @@ export interface Commodity {
 }
 
 /**
- * Search all backend commodities.
+ * Fetches all commodities from the backend.
  */
 export async function getCommodities(): Promise<Commodity[]> {
   const token = useAuthStore.getState().token;
@@ -40,7 +40,7 @@ export async function getCommodities(): Promise<Commodity[]> {
 }
 
 /**
- * Search one commodity by ID.
+ * Fetches a specific commodity by ID.
  */
 export async function getCommodityById(id: string): Promise<Commodity | undefined> {
   const token = useAuthStore.getState().token;
@@ -61,7 +61,7 @@ export async function getCommodityById(id: string): Promise<Commodity | undefine
   return response.json();
 }
 
-// --- ALERTS MOCK (Maintained until the alerts backend is ready.) ---
+// --- ALERTS MOCK (Kept until the alerts backend is ready) ---
 
 export interface AlertModel {
   id: string;

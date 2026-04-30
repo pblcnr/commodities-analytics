@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Switch } from 'react-native';
 import { useRouter, Stack, useLocalSearchParams } from 'expo-router';
 import { useTheme } from '../src/theme/ThemeContext';
-import { createAlert } from '../src/services/mockData';
+import { createAlert } from '../src/services/commodityService';
 import { BackButton } from '../src/components/BackButton';
 import { CustomInput } from '../src/components/ui/CustomInput';
 import { CustomButton } from '../src/components/ui/CustomButton';

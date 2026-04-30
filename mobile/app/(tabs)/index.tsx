@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
-import { getCommodities, Commodity } from '../../src/services/mockData';
+import { getCommodities, Commodity } from '../../src/services/commodityService';
 import { useTheme } from '../../src/theme/ThemeContext';
 import { CommodityCard } from '../../src/components/features/CommodityCard';
 

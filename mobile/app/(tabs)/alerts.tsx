@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../src/theme/ThemeContext';
 import { useRouter } from 'expo-router';
-import { getAlerts, AlertModel, deleteAlert, toggleAlertStatus } from '../../src/services/mockData';
+import { getAlerts, AlertModel, deleteAlert, toggleAlertStatus } from '../../src/services/commodityService';
 import { Ionicons } from '@expo/vector-icons';
 import { AlertCard } from '../../src/components/features/AlertCard';
 

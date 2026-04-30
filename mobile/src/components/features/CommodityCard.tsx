@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Commodity } from '../../services/mockData';
+import { Commodity } from '../../services/commodityService';
 import { useTheme } from '../../theme/ThemeContext';
 
 interface Props {

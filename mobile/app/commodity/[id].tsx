@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { getCommodityById, Commodity } from '../../src/services/mockData';
+import { getCommodityById, Commodity } from '../../src/services/commodityService';
 import { useTheme } from '../../src/theme/ThemeContext';
 import { LineChart } from 'react-native-chart-kit';
 import { BackButton } from '../../src/components/BackButton';

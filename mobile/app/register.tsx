@@ -15,19 +15,20 @@ export default function RegisterScreen() {
   
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const login = useAuthStore((state) => state.login);
 
   const handleRegister = useCallback(async () => {
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !phone) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos.');
       return;
     }
 
     try {
       setIsLoading(true);
-      const data = await registerApi(name, email, password);
+      const data = await registerApi(name, email, password, phone);
       // Automatically log in the user after successful registration
       login(data.accessToken, data.user);
       router.replace('/(tabs)');
@@ -36,7 +37,7 @@ export default function RegisterScreen() {
     } finally {
       setIsLoading(false);
     }
-  }, [name, email, password, login, router]);
+  }, [name, email, password, phone, login, router]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
@@ -73,6 +74,14 @@ export default function RegisterScreen() {
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
+          />
+
+          <CustomInput
+            label="Telefone"
+            placeholder="(11) 99999-9999"
+            value={phone}
+            onChangeText={setPhone}
+            keyboardType="phone-pad"
           />
 
           <CustomInput
