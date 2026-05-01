@@ -21,7 +21,7 @@ export default function LoginPage() {
 
     try {
       const data = await login(email, password);
-      
+
       // Salva o token localmente (localStorage ou cookies)
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("user", JSON.stringify(data.user));
@@ -42,32 +42,32 @@ export default function LoginPage() {
       </div>
       <div className="login-card glass">
         <div className="logo">
-          <div className="logo-icon">C</div>
+          <img src="/logo.svg" alt="Commodities Analytics Logo" className="logo-icon" />
           <h1>Commodities Analytics</h1>
         </div>
         <p className="subtitle">Previsões inteligentes de matérias-primas</p>
-        
+
         {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}
 
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="email">Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              placeholder="seu@email.com" 
-              required 
+            <input
+              type="email"
+              id="email"
+              placeholder="seu@email.com"
+              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="input-group">
             <label htmlFor="password">Senha</label>
-            <input 
-              type="password" 
-              id="password" 
-              placeholder="••••••••" 
-              required 
+            <input
+              type="password"
+              id="password"
+              placeholder="••••••••"
+              required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />

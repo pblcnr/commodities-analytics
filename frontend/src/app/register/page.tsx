@@ -23,7 +23,7 @@ export default function RegisterPage() {
 
     try {
       await register(name, email, password, phone);
-      
+
       // Após registrar com sucesso, redireciona para o login
       router.push("/");
     } catch (err: any) {
@@ -40,54 +40,54 @@ export default function RegisterPage() {
       </div>
       <div className="login-card glass">
         <div className="logo">
-          <div className="logo-icon">C</div>
+          <img src="/logo.svg" alt="Commodities Analytics Logo" className="logo-icon" />
           <h1>Commodities Analytics</h1>
         </div>
         <p className="subtitle">Crie sua conta</p>
-        
+
         {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}
 
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="name">Nome</label>
-            <input 
-              type="text" 
-              id="name" 
-              placeholder="Seu nome completo" 
-              required 
+            <input
+              type="text"
+              id="name"
+              placeholder="Seu nome completo"
+              required
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="input-group">
             <label htmlFor="email">Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              placeholder="seu@email.com" 
-              required 
+            <input
+              type="email"
+              id="email"
+              placeholder="seu@email.com"
+              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="input-group">
             <label htmlFor="password">Senha</label>
-            <input 
-              type="password" 
-              id="password" 
-              placeholder="••••••••" 
-              required 
+            <input
+              type="password"
+              id="password"
+              placeholder="••••••••"
+              required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className="input-group">
             <label htmlFor="phone">Telefone</label>
-            <input 
-              type="tel" 
-              id="phone" 
-              placeholder="(11) 99999-9999" 
-              required 
+            <input
+              type="tel"
+              id="phone"
+              placeholder="(11) 99999-9999"
+              required
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />

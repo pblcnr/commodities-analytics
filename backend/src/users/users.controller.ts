@@ -24,7 +24,7 @@ interface AuthenticatedRequest extends Request {
 @Controller('users')
 @UseGuards(JwtAuthGuard)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   /**
    * GET /api/v1/users?page=1&limit=20

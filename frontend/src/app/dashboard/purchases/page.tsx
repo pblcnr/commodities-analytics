@@ -30,8 +30,8 @@ export default function PurchasesPage() {
   return (
     <div className="purchases-wrapper">
       <div className="purchases-header">
-        <h1 className="modern-title">Registrar Nova Compra</h1>
-        <p className="modern-subtitle">Acompanhe seus custos e descubra sua economia baseada em dados reais de mercado.</p>
+        <h1 className="modern-title">Calcular Custo de Compra</h1>
+        <p className="modern-subtitle">Descubra sua economia baseada em dados reais de mercado.</p>
       </div>
 
       <div className="purchases-split-layout">
@@ -99,18 +99,7 @@ export default function PurchasesPage() {
               </div>
             </div>
           </div>
-
-          <div className="modern-input-group full-width">
-            <label htmlFor="date">Data da Compra</label>
-            <input 
-              type="date" 
-              id="date" 
-              defaultValue={new Date().toISOString().split('T')[0]} 
-              required 
-            />
-          </div>
-
-          <button type="submit" className="btn-modern-primary mt-4">Simular Economia</button>
+          <button type="submit" className="btn-modern-primary mt-4">Calcular Compra</button>
         </form>
 
         <div className="purchases-results-area">

@@ -13,10 +13,10 @@ export default function DashboardLayout({
       {/* Sidebar Navigation */}
       <aside className="sidebar">
         <div className="sidebar-header">
-          <div className="logo-icon-small">C</div>
+          <img src="/logo.svg" alt="Logo" className="logo-icon-small" />
           <h2>Analytics</h2>
         </div>
-        
+
         <nav className="sidebar-nav">
           <Link href="/dashboard" className="nav-item">
             Dashboard
@@ -26,6 +26,9 @@ export default function DashboardLayout({
           </Link>
           <Link href="/dashboard/alerts" className="nav-item">
             Alertas
+          </Link>
+          <Link href="/dashboard/partners" className="nav-item">
+            Parceiros
           </Link>
         </nav>
 
@@ -47,7 +50,7 @@ export default function DashboardLayout({
       {/* Main Content Area */}
       <main className="dashboard-content">
         <header className="mobile-header">
-          <div className="logo-icon-small">C</div>
+          <img src="/logo.svg" alt="Logo" className="logo-icon-small" />
           <h2>Analytics</h2>
           {/* Menu icon placeholder for mobile */}
           <button className="mobile-menu-btn">☰</button>

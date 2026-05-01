@@ -5,9 +5,10 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { CommoditiesModule } from './commodities/commodities.module';
+import { EnterpriseModule } from './enterprise/enterprise.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), UsersModule, AuthModule, PrismaModule, CommoditiesModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), UsersModule, AuthModule, PrismaModule, CommoditiesModule, EnterpriseModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
