@@ -59,12 +59,15 @@
 }
 
 .btn-primary {
-  background: var(--text-primary);
-  color: var(--bg-primary);
+  background: var(--accent-gradient, var(--accent-primary));
+  background-size: 200% auto;
+  color: white;
+  border: none;
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
+  background-position: right center;
+  opacity: 0.95;
   transform: translateY(-1px);
 }
 

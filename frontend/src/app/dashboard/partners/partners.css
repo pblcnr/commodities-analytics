@@ -283,15 +283,17 @@
 
 .btn-primary {
   padding: 0.5rem 1.5rem;
-  background: var(--accent-primary);
+  background: var(--accent-gradient, var(--accent-primary));
+  background-size: 200% auto;
   color: white;
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: 500;
-  transition: opacity var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
+  background-position: right center;
+  opacity: 0.95;
 }

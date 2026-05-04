@@ -6,8 +6,9 @@
   --text-primary: #ffffff;
   --text-secondary: #a1a1aa;
   
-  --accent-primary: #0070f3;
-  --accent-primary-hover: #0056b3;
+  --accent-primary: #d946ef;
+  --accent-primary-hover: #c026d3;
+  --accent-gradient: linear-gradient(90deg, #8b5cf6, #ec4899, #f97316);
   
   --status-good: #10b981;
   --status-good-bg: rgba(16, 185, 129, 0.1);
@@ -60,6 +61,10 @@ html, body {
   padding: 0;
   box-sizing: border-box;
   background-color: var(--bg-primary);
+  background-image: 
+    radial-gradient(circle at top right, rgba(217, 70, 239, 0.15), transparent 50%),
+    radial-gradient(circle at bottom left, rgba(139, 92, 246, 0.15), transparent 50%);
+  background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-geist-sans), sans-serif;
   height: 100%;
@@ -98,4 +103,22 @@ button {
   :root:not(.dark) .glass {
     background: rgba(255, 255, 255, 0.7);
   }
+}
+
+/* Brand Typography */
+.brand-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.brand-highlight {
+  background: var(--accent-gradient, var(--accent-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-left: 0.35rem;
 }

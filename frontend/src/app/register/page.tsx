@@ -35,72 +35,72 @@ export default function RegisterPage() {
 
   return (
     <main className="login-container">
-      <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+      <div className="theme-toggle-wrapper">
         <ThemeToggle />
       </div>
-      <div className="login-card glass">
-        <div className="logo">
-          <img src="/logo.svg" alt="Commodities Analytics Logo" className="logo-icon" />
-          <h1>Commodities Analytics</h1>
-        </div>
-        <p className="subtitle">Crie sua conta</p>
+      
+      <div className="login-content">
+        <div className="login-form-wrapper">
+          <div style={{ marginBottom: '3rem' }}>
+            <h2 className="brand-title" style={{ fontSize: '1.75rem' }}>Commodities <span className="brand-highlight">Analytics</span><span className="dot">.</span></h2>
+          </div>
+          <h1 className="login-title">Crie sua conta<span className="dot">.</span></h1>
 
-        {error && <div className="error-message" style={{ color: 'red', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}
+          {error && <div className="error-message">{error}</div>}
 
-        <form className="login-form" onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label htmlFor="name">Nome</label>
-            <input
-              type="text"
-              id="name"
-              placeholder="Seu nome completo"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className="input-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="seu@email.com"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="input-group">
-            <label htmlFor="password">Senha</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="••••••••"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="input-group">
-            <label htmlFor="phone">Telefone</label>
-            <input
-              type="tel"
-              id="phone"
-              placeholder="(11) 99999-9999"
-              required
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
-          <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Registrando..." : "Registrar"}
-          </button>
-        </form>
+          <form className="login-form" onSubmit={handleSubmit}>
+            <div className="input-group">
+              <label htmlFor="name">Nome</label>
+              <input
+                type="text"
+                id="name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="password">Senha</label>
+              <input
+                type="password"
+                id="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="input-group">
+              <label htmlFor="phone">Telefone</label>
+              <input
+                type="tel"
+                id="phone"
+                required
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+            <button type="submit" className="btn-login" disabled={loading}>
+              {loading ? "Registrando..." : "Registrar"}
+            </button>
+          </form>
 
-        <div style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.875rem' }}>
-          Já possui conta? <Link href="/" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: '500' }}>Faça login</Link>
+          <div className="register-link-wrapper">
+            <Link href="/" className="register-link">Já possui conta? Faça login</Link>
+          </div>
         </div>
       </div>
+      
+      <div className="login-background"></div>
     </main>
   );
 }
