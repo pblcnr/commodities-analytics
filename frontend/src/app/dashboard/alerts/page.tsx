@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AlertModel, getAlerts, toggleAlertStatus, deleteAlert } from "@/services/mockData";
+import { AlertModel, getAlerts, toggleAlertStatus, deleteAlert } from "@/services/alerts";
 import { Commodity, getCommodities } from "@/services/commodities";
 import Link from "next/link";
 import { SiTelegram, SiWhatsapp, SiGmail } from "react-icons/si";
@@ -11,7 +11,7 @@ export default function AlertsPage() {
   const [alerts, setAlerts] = useState<AlertModel[]>([]);
   const [commodities, setCommodities] = useState<Commodity[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Filters
   const [statusFilter, setStatusFilter] = useState("todos");
   const [commodityFilter, setCommodityFilter] = useState("todas");
@@ -44,9 +44,9 @@ export default function AlertsPage() {
   const filteredAlerts = alerts.filter(alert => {
     if (statusFilter === "ativos" && !alert.active) return false;
     if (statusFilter === "inativos" && alert.active) return false;
-    
+
     if (commodityFilter !== "todas" && alert.commodityName !== commodityFilter) return false;
-    
+
     return true;
   });
 
@@ -66,13 +66,13 @@ export default function AlertsPage() {
         {/* Sidebar for Filters */}
         <div className="modern-form card glass" style={{ height: 'fit-content' }}>
           <div className="form-section-title">Filtros</div>
-          
+
           <div className="modern-input-group full-width">
             <label htmlFor="statusFilter">Status</label>
             <div className="select-wrapper">
-              <select 
+              <select
                 id="statusFilter"
-                value={statusFilter} 
+                value={statusFilter}
                 onChange={e => setStatusFilter(e.target.value)}
               >
                 <option value="todos">Todos</option>
@@ -85,9 +85,9 @@ export default function AlertsPage() {
           <div className="modern-input-group full-width" style={{ marginTop: '1rem' }}>
             <label htmlFor="commodityFilter">Produto</label>
             <div className="select-wrapper">
-              <select 
+              <select
                 id="commodityFilter"
-                value={commodityFilter} 
+                value={commodityFilter}
                 onChange={e => setCommodityFilter(e.target.value)}
               >
                 <option value="todas">Todos os Produtos</option>
@@ -119,30 +119,30 @@ export default function AlertsPage() {
                         {alert.active ? 'Ativo' : 'Inativo'}
                       </div>
                     </div>
-                    
+
                     <div className="alert-condition-text">
                       <span className="icon">🎯</span> {alert.condition}
                     </div>
-                    
+
                     <div className="alert-channel-info">
                       <span className="icon" style={{ display: 'flex', alignItems: 'center' }}>
-                        {alert.channel === "Telegram" ? <SiTelegram color="#26A5E4" /> : 
-                         alert.channel === "WhatsApp" ? <SiWhatsapp color="#25D366" /> : 
-                         alert.channel === "E-mail" ? <SiGmail color="#EA4335" /> : "📱"}
+                        {alert.channel === "Telegram" ? <SiTelegram color="#26A5E4" /> :
+                          alert.channel === "WhatsApp" ? <SiWhatsapp color="#25D366" /> :
+                            alert.channel === "E-mail" ? <SiGmail color="#EA4335" /> : "📱"}
                       </span> via {alert.channel}
                     </div>
 
                     <div className="alert-modern-actions">
-                      <button 
-                        type="button" 
-                        className={`btn-modern-action ${alert.active ? 'btn-deactivate' : 'btn-activate'}`} 
+                      <button
+                        type="button"
+                        className={`btn-modern-action ${alert.active ? 'btn-deactivate' : 'btn-activate'}`}
                         onClick={() => handleToggle(alert.id)}
                       >
                         {alert.active ? 'Desativar' : 'Ativar'}
                       </button>
-                      <button 
-                        type="button" 
-                        className="btn-modern-action btn-delete-modern" 
+                      <button
+                        type="button"
+                        className="btn-modern-action btn-delete-modern"
                         onClick={() => handleDelete(alert.id)}
                       >
                         Excluir

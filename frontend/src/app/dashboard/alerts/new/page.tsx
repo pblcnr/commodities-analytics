@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createAlert } from "@/services/mockData";
+import { createAlert } from "@/services/alerts";
 import { Commodity, getCommodities } from "@/services/commodities";
 import Link from "next/link";
 import { SiTelegram, SiWhatsapp, SiGmail } from "react-icons/si";
@@ -45,7 +45,7 @@ export default function NewAlertPage() {
     await createAlert(newAlert);
     setIsSubmitting(false);
     setIsSuccess(true);
-    
+
     // Reset form
     setSelectedCommodityId("");
     setTargetPrice("");
@@ -87,15 +87,15 @@ export default function NewAlertPage() {
         </div>
       ) : (
         <form className="modern-form card glass" onSubmit={handleCreateAlert}>
-          <div className="form-section-title">Regras do Alerta</div>
-          
+
+
           <div className="modern-input-group full-width">
             <label htmlFor="commodity">Matéria-Prima</label>
             <div className="select-wrapper">
-              <select 
+              <select
                 id="commodity"
-                required 
-                value={selectedCommodityId} 
+                required
+                value={selectedCommodityId}
                 onChange={e => setSelectedCommodityId(e.target.value)}
               >
                 <option value="" disabled>Selecione a commodity</option>
@@ -109,9 +109,9 @@ export default function NewAlertPage() {
           <div className="modern-input-group full-width">
             <label htmlFor="condition">Qual a condição?</label>
             <div className="select-wrapper">
-              <select 
+              <select
                 id="condition"
-                value={condition} 
+                value={condition}
                 onChange={e => setCondition(e.target.value)}
               >
                 <option value="Abaixo">Preço cair abaixo de</option>
@@ -126,12 +126,12 @@ export default function NewAlertPage() {
               <label htmlFor="targetPrice">Preço alvo (R$)</label>
               <div className="input-with-icon">
                 <span className="icon">R$</span>
-                <input 
-                  type="number" 
-                  step="0.01" 
+                <input
+                  type="number"
+                  step="0.01"
                   id="targetPrice"
-                  required 
-                  placeholder="Ex: 50.00" 
+                  required
+                  placeholder="Ex: 50.00"
                   value={targetPrice}
                   onChange={e => setTargetPrice(e.target.value)}
                   disabled={isSubmitting}
@@ -143,15 +143,15 @@ export default function NewAlertPage() {
           <div className="modern-input-group full-width">
             <label>Receber por</label>
             <div className="channels-group" style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setChannel('Telegram')}
                 disabled={isSubmitting}
-                style={{ 
-                  flex: 1, padding: '1rem', borderRadius: 'var(--radius-md)', 
-                  border: `2px solid ${channel === 'Telegram' ? '#26A5E4' : 'var(--border-color)'}`, 
-                  background: channel === 'Telegram' ? 'rgba(38, 165, 228, 0.05)' : 'var(--bg-surface)', 
-                  cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', 
+                style={{
+                  flex: 1, padding: '1rem', borderRadius: 'var(--radius-md)',
+                  border: `2px solid ${channel === 'Telegram' ? '#26A5E4' : 'var(--border-color)'}`,
+                  background: channel === 'Telegram' ? 'rgba(38, 165, 228, 0.05)' : 'var(--bg-surface)',
+                  cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
                   color: 'var(--text-primary)', transition: 'all 0.2s',
                   boxShadow: channel === 'Telegram' ? '0 4px 12px rgba(38, 165, 228, 0.15)' : 'none'
                 }}
@@ -159,16 +159,16 @@ export default function NewAlertPage() {
                 <SiTelegram size={24} color={channel === 'Telegram' ? '#26A5E4' : 'var(--text-secondary)'} />
                 <span style={{ fontSize: '0.85rem', fontWeight: channel === 'Telegram' ? '700' : '500' }}>Telegram</span>
               </button>
-              
-              <button 
-                type="button" 
+
+              <button
+                type="button"
                 onClick={() => setChannel('WhatsApp')}
                 disabled={isSubmitting}
-                style={{ 
-                  flex: 1, padding: '1rem', borderRadius: 'var(--radius-md)', 
-                  border: `2px solid ${channel === 'WhatsApp' ? '#25D366' : 'var(--border-color)'}`, 
-                  background: channel === 'WhatsApp' ? 'rgba(37, 211, 102, 0.05)' : 'var(--bg-surface)', 
-                  cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', 
+                style={{
+                  flex: 1, padding: '1rem', borderRadius: 'var(--radius-md)',
+                  border: `2px solid ${channel === 'WhatsApp' ? '#25D366' : 'var(--border-color)'}`,
+                  background: channel === 'WhatsApp' ? 'rgba(37, 211, 102, 0.05)' : 'var(--bg-surface)',
+                  cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
                   color: 'var(--text-primary)', transition: 'all 0.2s',
                   boxShadow: channel === 'WhatsApp' ? '0 4px 12px rgba(37, 211, 102, 0.15)' : 'none'
                 }}
@@ -177,15 +177,15 @@ export default function NewAlertPage() {
                 <span style={{ fontSize: '0.85rem', fontWeight: channel === 'WhatsApp' ? '700' : '500' }}>WhatsApp</span>
               </button>
 
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={() => setChannel('E-mail')}
                 disabled={isSubmitting}
-                style={{ 
-                  flex: 1, padding: '1rem', borderRadius: 'var(--radius-md)', 
-                  border: `2px solid ${channel === 'E-mail' ? '#EA4335' : 'var(--border-color)'}`, 
-                  background: channel === 'E-mail' ? 'rgba(234, 67, 53, 0.05)' : 'var(--bg-surface)', 
-                  cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', 
+                style={{
+                  flex: 1, padding: '1rem', borderRadius: 'var(--radius-md)',
+                  border: `2px solid ${channel === 'E-mail' ? '#EA4335' : 'var(--border-color)'}`,
+                  background: channel === 'E-mail' ? 'rgba(234, 67, 53, 0.05)' : 'var(--bg-surface)',
+                  cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
                   color: 'var(--text-primary)', transition: 'all 0.2s',
                   boxShadow: channel === 'E-mail' ? '0 4px 12px rgba(234, 67, 53, 0.15)' : 'none'
                 }}
