@@ -19,7 +19,7 @@ export const CommodityCard = memo(({ item }: Props) => {
   const getRecColor = (rec: string) => {
     switch (rec) {
       case 'good': return { bg: colors.good, text: colors.goodText, label: 'Bom para Compra' };
-      case 'regular': return { bg: colors.regular, text: colors.regularText, label: 'Momento Regular' };
+      case 'regular': return { bg: 'transparent', text: colors.regularText, label: 'Momento Regular' };
       case 'bad': return { bg: colors.bad, text: colors.badText, label: 'Aguarde' };
       default: return { bg: colors.border, text: colors.textSecondary, label: '' };
     }

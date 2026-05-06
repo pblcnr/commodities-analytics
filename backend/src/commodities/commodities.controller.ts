@@ -9,7 +9,8 @@ export class CommoditiesController {
 
   /**
    * GET /api/v1/commodities
-   * Returns the list of all available commodities with price and forecast data.
+   * Busca commodities na API externa, classifica cada uma via /api/v1/classify
+   * e retorna o payload serializado para o frontend.
    */
   @Get()
   findAll() {
@@ -18,11 +19,12 @@ export class CommoditiesController {
 
   /**
    * GET /api/v1/commodities/:id
-   * Returns a single commodity by its ID (e.g. "milho", "soja").
-   * Throws 404 if not found.
+   * Retorna dados enriquecidos de uma commodity: histórico, classificação e previsões.
+   * Agrega 3 chamadas à API externa em paralelo (mockadas enquanto API não está disponível).
+   * Throws 404 se não encontrado.
    */
   @Get(':id')
-  findById(@Param('id') id: string) {
+  async findById(@Param('id') id: string) {
     return this.commoditiesService.findById(id);
   }
 }

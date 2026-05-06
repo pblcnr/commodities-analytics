@@ -18,9 +18,12 @@ export interface HistoryPoint {
 interface CommodityChartProps {
   data: HistoryPoint[];
   unit: string;
+  /** Quando true, aplica paleta de cores de previsão (roxo) em vez de histórico (ciano) */
+  isForecast?: boolean;
 }
 
-export default function CommodityChart({ data, unit }: CommodityChartProps) {
+export default function CommodityChart({ data, unit, isForecast = false }: CommodityChartProps) {
+  const accentColor = isForecast ? '#a78bfa' : '#00c6ff';
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -33,7 +36,7 @@ export default function CommodityChart({ data, unit }: CommodityChartProps) {
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)'
         }}>
           <p style={{ margin: 0, fontSize: '0.85rem', color: '#94a3b8' }}>{label}</p>
-          <p style={{ margin: '4px 0 0', fontWeight: 'bold', fontSize: '1.1rem', color: '#00c6ff' }}>
+          <p style={{ margin: '4px 0 0', fontWeight: 'bold', fontSize: '1.1rem', color: accentColor }}>
             R$ {payload[0].value.toFixed(2)} <span style={{fontSize:'0.8rem', color: '#cbd5e1', fontWeight: 'normal'}}>/{unit}</span>
           </p>
         </div>
@@ -51,8 +54,8 @@ export default function CommodityChart({ data, unit }: CommodityChartProps) {
         >
           <defs>
             <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#00c6ff" stopOpacity={0.4}/>
-              <stop offset="95%" stopColor="#00c6ff" stopOpacity={0}/>
+              <stop offset="5%" stopColor={accentColor} stopOpacity={0.4}/>
+              <stop offset="95%" stopColor={accentColor} stopOpacity={0}/>
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.05)" />
@@ -76,12 +79,13 @@ export default function CommodityChart({ data, unit }: CommodityChartProps) {
           <Area 
             type="monotone" 
             dataKey="price" 
-            stroke="#00c6ff" 
+            stroke={accentColor} 
             strokeWidth={3}
+            strokeDasharray={isForecast ? '6 3' : undefined}
             fillOpacity={1} 
             fill="url(#colorPrice)" 
             animationDuration={1500}
-            activeDot={{ r: 6, fill: '#00c6ff', stroke: '#fff', strokeWidth: 2 }}
+            activeDot={{ r: 6, fill: accentColor, stroke: '#fff', strokeWidth: 2 }}
           />
         </AreaChart>
       </ResponsiveContainer>
