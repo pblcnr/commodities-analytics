@@ -11,9 +11,10 @@ export interface ExternalCommodityItem {
 
 /**
  * Payload de request para POST /api/v1/classify da API externa.
+ * Aceita string | number pois a API externa pode trabalhar com ambos.
  */
 export interface ClassifyRequest {
-  id_materia_prima: string;
+  id_materia_prima: string | number;
 }
 
 /**
@@ -58,7 +59,7 @@ export interface HistoryResponse {
 // ─── Interfaces para POST /api/v1/predict ──────────────────────────────────
 
 export interface PredictRequest {
-  id_materia_prima: string;
+  id_materia_prima: string | number;
   periodos_futuros: number;
 }
 

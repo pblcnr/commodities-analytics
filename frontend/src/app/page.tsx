@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import "./login.css";
 import ThemeToggle from "@/components/ThemeToggle";
 import { login } from "@/services/auth";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function LoginPage() {
-  const router = useRouter();
+  const { login: authLogin } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21,13 +21,7 @@ export default function LoginPage() {
 
     try {
       const data = await login(email, password);
-
-      // Salva o token localmente (localStorage ou cookies)
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      // Redireciona para o dashboard
-      router.push("/dashboard");
+      authLogin(data.accessToken, data.user);
     } catch (err: any) {
       setError(err.message || "Erro ao fazer login. Verifique suas credenciais.");
     } finally {

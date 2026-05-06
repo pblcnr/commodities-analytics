@@ -91,7 +91,7 @@ export default function DashboardPage() {
 
           return (
             <Link
-              href={`/dashboard/commodity/${item.id}`}
+              href={`/dashboard/commodities/${item.id}`}
               key={item.id}
               className="card commodity-card"
             >

@@ -1,37 +1,9 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9000/api/v1';
+import { apiClient } from "@/lib/api-client";
 
 export const login = async (email: string, password: string) => {
-  const response = await fetch(`${API_URL}/auth/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email, password }),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(errorData?.message || 'Erro ao fazer login');
-  }
-
-  const data = await response.json();
-  return data; // { accessToken, user }
+  return apiClient.post<{ accessToken: string; user: any }>('/auth/login', { email, password });
 };
 
 export const register = async (name: string, email: string, password: string, phone: string) => {
-  const response = await fetch(`${API_URL}/auth/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ name, email, password, phone }),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new Error(errorData?.message || 'Erro ao fazer registro');
-  }
-
-  const data = await response.json();
-  return data; // { accessToken, user } (dependendo da implementação do backend)
+  return apiClient.post<{ accessToken: string; user: any }>('/auth/register', { name, email, password, phone });
 };

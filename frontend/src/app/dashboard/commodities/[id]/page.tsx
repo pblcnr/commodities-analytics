@@ -273,7 +273,7 @@ export default function CommodityDetailPage({ params }: { params: Params }) {
             </div>
           </div>
           <div className="header-actions">
-            <Link href="/dashboard/purchases" className="btn-primary">
+            <Link href="/dashboard/orders" className="btn-primary">
               Registrar Compra
             </Link>
             <Link href="/dashboard/alerts" className="btn-secondary">

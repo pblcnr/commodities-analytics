@@ -58,8 +58,10 @@ export class CommoditiesService {
 
     const classifications = await Promise.all(
       activeItems.map(async (item): Promise<CommodityResponseDto | null> => {
+        // Garantir que o id seja string para consistência com o contrato do frontend
+        const idStr = String(item.id_materia_prima);
         const body: ClassifyRequest = {
-          id_materia_prima: item.id_materia_prima,
+          id_materia_prima: idStr,
         };
 
         try {
@@ -71,7 +73,7 @@ export class CommoditiesService {
 
           if (!classifyResponse.ok) {
             this.logger.warn(
-              `Classify retornou ${classifyResponse.status} para ${item.id_materia_prima}`,
+              `Classify retornou ${classifyResponse.status} para ${idStr}`,
             );
             return null;
           }
@@ -79,8 +81,10 @@ export class CommoditiesService {
           const data = (await classifyResponse.json()) as ClassifyResponse;
 
           // 3. Serializar para o contrato do frontend
+          // IMPORTANTE: forçar toString() no id pois a API externa retorna number,
+          // mas o frontend usa === para comparar com o value do <select> (sempre string)
           return {
-            id: data.id_materia_prima,
+            id: String(data.id_materia_prima),
             name: data.nome,
             actual_price: data.preco_atual,
             variation_percentage: data.variacao_percentual,
@@ -88,7 +92,7 @@ export class CommoditiesService {
           };
         } catch (err) {
           this.logger.warn(
-            `Erro ao classificar commodity ${item.id_materia_prima}`,
+            `Erro ao classificar commodity ${idStr}`,
             err,
           );
           return null;
@@ -122,11 +126,13 @@ export class CommoditiesService {
       );
     }
 
-    const classifyBody: ClassifyRequest = { id_materia_prima: id };
-    const predictBody: PredictRequest = { id_materia_prima: id, periodos_futuros: 3 };
+    // Garantir que o id seja string normalizada antes de passar para a API externa
+    const normalizedId = String(id);
+    const classifyBody: ClassifyRequest = { id_materia_prima: normalizedId };
+    const predictBody: PredictRequest = { id_materia_prima: normalizedId, periodos_futuros: 3 };
 
     const [historyRes, classifyRes, predictRes] = await Promise.all([
-      fetch(`${baseUrl}/api/v1/commodities/${id}/history`),
+      fetch(`${baseUrl}/api/v1/commodities/${normalizedId}/history`),
       fetch(`${baseUrl}/api/v1/classify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -157,7 +163,8 @@ export class CommoditiesService {
 
     return {
       nome: classify.nome,
-      id_materia_prima: classify.id_materia_prima,
+      // Forçar string para manter consistência com o contrato do frontend
+      id_materia_prima: String(classify.id_materia_prima),
       preco_atual: classify.preco_atual,
       previsao_media_futura: classify.previsao_media_futura,
       variacao_percentual: classify.variacao_percentual,
