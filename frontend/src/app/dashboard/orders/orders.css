@@ -1,8 +1,9 @@
-.purchases-wrapper {
+.orders-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 2rem;
   animation: fadeUp 0.4s ease-out forwards;
+  margin-top: 4rem;
 }
 
 @keyframes fadeUp {
@@ -10,7 +11,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.purchases-header {
+.orders-header {
   margin-bottom: 1rem;
 }
 
@@ -29,7 +30,7 @@
   font-size: 1.1rem;
 }
 
-.purchases-split-layout {
+.orders-split-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
@@ -37,7 +38,7 @@
 }
 
 @media (max-width: 900px) {
-  .purchases-split-layout {
+  .orders-split-layout {
     grid-template-columns: 1fr;
   }
 }
@@ -165,7 +166,7 @@
 }
 
 /* Results Area */
-.purchases-results-area {
+.orders-results-area {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;

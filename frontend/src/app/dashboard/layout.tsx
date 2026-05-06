@@ -2,9 +2,10 @@
 
 import "./dashboard.css";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   FiHome, 
   FiShoppingCart, 
@@ -20,24 +21,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [isDockVisible, setIsDockVisible] = useState(true);
-  const [user, setUser] = useState<{ name: string; role?: string } | null>(null);
+  const { user, logout } = useAuth();
   const pathname = usePathname();
-
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (e) {
-        console.error("Erro ao carregar usuário:", e);
-      }
-    }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
-  };
 
   const getInitials = (name: string) => {
     if (!name) return "US";
@@ -60,12 +45,12 @@ export default function DashboardLayout({
             <div className="user-avatar">{user ? getInitials(user.name) : "US"}</div>
             <div className="user-info">
               <span className="user-name">{user?.name || "Usuário"}</span>
-              <span className="user-role">{user?.role || "Comprador"}</span>
+              <span className="user-role">Comprador</span>
             </div>
           </div>
-          <Link href="/" className="logout-btn" onClick={handleLogout}>
+          <button className="logout-btn" onClick={logout} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', font: 'inherit' }}>
             Sair
-          </Link>
+          </button>
         </div>
       </header>
 
@@ -83,7 +68,7 @@ export default function DashboardLayout({
             <FiHome className="dock-item-icon" />
             <span className="dock-label">Dashboard</span>
           </Link>
-          <Link href="/dashboard/purchases" className={`dock-item ${pathname === '/dashboard/purchases' ? 'active' : ''}`}>
+          <Link href="/dashboard/orders" className={`dock-item ${pathname === '/dashboard/orders' ? 'active' : ''}`}>
             <FiShoppingCart className="dock-item-icon" />
             <span className="dock-label">Compras</span>
           </Link>
@@ -91,9 +76,9 @@ export default function DashboardLayout({
             <FiBell className="dock-item-icon" />
             <span className="dock-label">Alertas</span>
           </Link>
-          <Link href="/dashboard/partners" className={`dock-item ${pathname === '/dashboard/partners' ? 'active' : ''}`}>
+          <Link href="/dashboard/suppliers" className={`dock-item ${pathname === '/dashboard/suppliers' ? 'active' : ''}`}>
             <FiUsers className="dock-item-icon" />
-            <span className="dock-label">Parceiros</span>
+            <span className="dock-label">Fornecedores</span>
           </Link>
         </nav>
       </div>

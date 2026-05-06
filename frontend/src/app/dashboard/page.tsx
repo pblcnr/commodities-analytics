@@ -5,12 +5,36 @@ import { useEffect, useState } from "react";
 import { getCommodities, Commodity } from "@/services/commodities";
 import "./dashboard-page.css";
 
-function getRecommendationText(rec: string) {
-  switch (rec) {
-    case "good": return "Bom para Compra";
-    case "regular": return "Momento Regular";
-    case "bad": return "Aguarde";
-    default: return "";
+/**
+ * Mapeia a classificação da API externa para texto em português.
+ * A API retorna: "bom" | "regular" | "ruim"
+ */
+function getClassificationLabel(classification: string): string {
+  switch (classification.toLowerCase()) {
+    case "bom":
+      return "Bom para Compra";
+    case "regular":
+      return "Momento Regular";
+    case "ruim":
+      return "Aguarde";
+    default:
+      return classification;
+  }
+}
+
+/**
+ * Retorna a classe CSS do badge com base na classificação.
+ */
+function getClassificationCssClass(classification: string): string {
+  switch (classification.toLowerCase()) {
+    case "bom":
+      return "good";
+    case "regular":
+      return "regular";
+    case "ruim":
+      return "bad";
+    default:
+      return "regular";
   }
 }
 
@@ -61,28 +85,36 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid-cards">
-        {commodities.map((item) => (
-          <Link href={`/dashboard/commodity/${item.id}`} key={item.id} className="card commodity-card">
-            <div className="commodity-header">
-              <h3>{item.name}</h3>
-              <span className={`badge ${item.recommendation}`}>
-                {getRecommendationText(item.recommendation)}
-              </span>
-            </div>
+        {commodities.map((item) => {
+          const badgeClass = getClassificationCssClass(item.classification);
+          const isUp = item.variation_percentage > 0;
 
-            <div className="commodity-price-info">
-              <span className="price">R$ {item.currentPrice.toFixed(2)}</span>
-              <span className="unit">/ {item.unit}</span>
-            </div>
+          return (
+            <Link
+              href={`/dashboard/commodities/${item.id}`}
+              key={item.id}
+              className="card commodity-card"
+            >
+              <div className="commodity-header">
+                <h3>{item.name}</h3>
+                <span className={`badge ${badgeClass}`}>
+                  {getClassificationLabel(item.classification)}
+                </span>
+              </div>
 
-            <div className="commodity-forecast">
-              <span className="forecast-label">Previsão (30d):</span>
-              <span className={`forecast-value ${item.forecastPercent > 0 ? "up" : "down"}`}>
-                {item.forecastPercent > 0 ? "+" : ""}{item.forecastPercent}%
-              </span>
-            </div>
-          </Link>
-        ))}
+              <div className="commodity-price-info">
+                <span className="price">R$ {item.actual_price.toFixed(2)}</span>
+              </div>
+
+              <div className="commodity-forecast">
+                <span className="forecast-label">Variação prevista:</span>
+                <span className={`forecast-value ${isUp ? "up" : "down"}`}>
+                  {isUp ? "+" : ""}{item.variation_percentage.toFixed(2)}%
+                </span>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

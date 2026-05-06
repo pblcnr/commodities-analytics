@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import "./partners.css";
+import "./suppliers.css";
 import { 
   IoStorefrontOutline, 
   IoCloseOutline, 
@@ -9,10 +9,10 @@ import {
   IoMailOutline, 
   IoCallOutline, 
   IoDocumentTextOutline,
-  IoMapOutline
 } from "react-icons/io5";
-import { getEnterprises, Enterprise } from "../../../services/enterprises";
-export default function PartnersPage() {
+import { getEnterprises, Enterprise } from "@/services/enterprises";
+
+export default function SuppliersPage() {
   const [filterType, setFilterType] = useState<string>("Todos");
   const [partners, setPartners] = useState<Enterprise[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -28,7 +28,7 @@ export default function PartnersPage() {
         setError(null);
       } catch (err) {
         console.error("Error fetching enterprises:", err);
-        setError("Não foi possível carregar os parceiros. Tente novamente mais tarde.");
+        setError("Não foi possível carregar os fornecedores. Tente novamente mais tarde.");
       } finally {
         setIsLoading(false);
       }
@@ -59,9 +59,9 @@ export default function PartnersPage() {
   };
 
   return (
-    <div className="partners-container">
-      <div className="partners-header">
-        <h1>Parceiros</h1>
+    <div className="suppliers-container">
+      <div className="suppliers-header">
+        <h1>Fornecedores</h1>
         <select 
           className="filter-select"
           value={filterType}
@@ -75,19 +75,19 @@ export default function PartnersPage() {
         </select>
       </div>
 
-      <div className="partners-grid">
+      <div className="suppliers-grid">
         {isLoading ? (
           // Skeleton Loading
           Array.from({ length: 4 }).map((_, index) => (
-            <div key={index} className="partner-card" style={{ animation: "pulse 1.5s infinite" }}>
+            <div key={index} className="partner-card skeleton-card">
               <div className="partner-card-header">
-                <div className="partner-icon" style={{ background: "#e0e0e0", width: "40px", height: "40px", borderRadius: "8px" }}></div>
+                <div className="skeleton-box" style={{ width: "48px", height: "48px", borderRadius: "var(--radius-md)" }}></div>
                 <div className="partner-info">
-                  <div style={{ background: "#e0e0e0", height: "20px", width: "150px", borderRadius: "4px", marginBottom: "8px" }}></div>
-                  <div style={{ background: "#e0e0e0", height: "14px", width: "100px", borderRadius: "4px" }}></div>
+                  <div className="skeleton-box" style={{ height: "16px", width: "60%", borderRadius: "4px", marginBottom: "8px" }}></div>
+                  <div className="skeleton-box" style={{ height: "12px", width: "40%", borderRadius: "4px" }}></div>
                 </div>
               </div>
-              <div style={{ background: "#e0e0e0", height: "36px", width: "100%", borderRadius: "6px", marginTop: "1rem" }}></div>
+              <div className="skeleton-box" style={{ height: "36px", width: "100%", borderRadius: "var(--radius-md)" }}></div>
             </div>
           ))
         ) : error ? (
@@ -117,7 +117,7 @@ export default function PartnersPage() {
 
         {!isLoading && !error && filteredPartners.length === 0 && (
           <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
-            Nenhum parceiro encontrado para o filtro selecionado.
+            Nenhum fornecedor encontrado para o filtro selecionado.
           </div>
         )}
       </div>
