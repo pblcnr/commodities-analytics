@@ -8,9 +8,10 @@ import { CommoditiesModule } from './commodities/commodities.module';
 import { EnterpriseModule } from './enterprise/enterprise.module';
 import { AlertsModule } from './alerts/alerts.module';
 import { IntegrationsModule } from './integrations/integrations.module';
+import { AssistentModule } from './assistent/assistent.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), UsersModule, AuthModule, PrismaModule, CommoditiesModule, EnterpriseModule, AlertsModule, IntegrationsModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), UsersModule, AuthModule, PrismaModule, CommoditiesModule, EnterpriseModule, AlertsModule, IntegrationsModule, AssistentModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
