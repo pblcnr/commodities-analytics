@@ -4,6 +4,7 @@ import "./dashboard.css";
 import Link from "next/link";
 import React, { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
+import GeminiChatDrawer from "@/components/GeminiChatDrawer";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
@@ -12,7 +13,8 @@ import {
   FiBell, 
   FiUsers, 
   FiChevronDown, 
-  FiMenu 
+  FiMenu,
+  FiMessageSquare 
 } from "react-icons/fi";
 
 export default function DashboardLayout({
@@ -21,6 +23,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [isDockVisible, setIsDockVisible] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const { user, logout } = useAuth();
   const pathname = usePathname();
 
@@ -80,6 +83,14 @@ export default function DashboardLayout({
             <FiUsers className="dock-item-icon" />
             <span className="dock-label">Fornecedores</span>
           </Link>
+          <button 
+            onClick={() => setIsChatOpen(!isChatOpen)} 
+            className={`dock-item ${isChatOpen ? 'active' : ''}`}
+            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+          >
+            <FiMessageSquare className="dock-item-icon" />
+            <span className="dock-label">Assistente</span>
+          </button>
         </nav>
       </div>
 
@@ -91,6 +102,8 @@ export default function DashboardLayout({
       >
         {isDockVisible ? <FiChevronDown /> : <FiMenu />}
       </button>
+
+      <GeminiChatDrawer isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </div>
   );
 }

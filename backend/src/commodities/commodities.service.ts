@@ -1,21 +1,17 @@
 import {
   Injectable,
-  NotFoundException,
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CommodityDto } from './dto/commodity.dto';
 import {
   ExternalCommodityItem,
   ClassifyRequest,
   ClassifyResponse,
   CommodityResponseDto,
   HistoryResponse,
-  HistoryItem,
   PredictRequest,
   PredictResponse,
-  ForecastItem,
   CommodityDetailDto,
 } from './dto/external-commodity.dto';
 @Injectable()
