@@ -4,6 +4,7 @@ import "./dashboard.css";
 import Link from "next/link";
 import React, { useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
+import GeminiChatDrawer from "@/components/GeminiChatDrawer";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
@@ -101,6 +102,8 @@ export default function DashboardLayout({
       >
         {isDockVisible ? <FiChevronDown /> : <FiMenu />}
       </button>
+
+      <GeminiChatDrawer isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </div>
   );
 }
