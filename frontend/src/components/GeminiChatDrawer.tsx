@@ -51,7 +51,7 @@ export default function GeminiChatDrawer({ isOpen, onClose }: { isOpen: boolean;
       <div className={`chat-drawer-overlay ${isOpen ? 'open' : ''}`} onClick={onClose} />
       <div className={`chat-drawer ${isOpen ? 'open' : ''}`}>
         <div className="chat-header">
-          <h3>Assistente Gemini</h3>
+          <h3>Assistente IA</h3>
           <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>
             <FiX size={24} />
           </button>
