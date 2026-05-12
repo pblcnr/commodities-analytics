@@ -33,11 +33,12 @@ export default function GeminiChatDrawer({ isOpen, onClose }: { isOpen: boolean;
 
     const userMsg = input.trim();
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+    const newMessages: Message[] = [...messages, { role: 'user', content: userMsg }];
+    setMessages(newMessages);
     setIsLoading(true);
 
     try {
-      const data = await apiClient.post<{ response: string }>('/assistent/message', { message: userMsg });
+      const data = await apiClient.post<{ response: string }>('/assistent/message', { history: newMessages });
       setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
     } catch (error) {
       setMessages(prev => [...prev, { role: 'assistant', content: 'Desculpe, tive um erro ao processar sua mensagem.' }]);

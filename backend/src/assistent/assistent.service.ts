@@ -25,13 +25,25 @@ export class AssistentService {
         }
     }
 
-    async sendMessage(message: string) {
+    async sendMessage(input: string | any[]) {
         try {
+            let requestContents: any;
+
+            // Se o input for um array (histórico do chat), formatamos para o Gemini
+            if (Array.isArray(input)) {
+                requestContents = input.map(msg => ({
+                    role: msg.role === 'assistant' ? 'model' : 'user',
+                    parts: [{ text: msg.content }]
+                }));
+            } else {
+                requestContents = input;
+            }
+
             const response = await this.genAI.models.generateContent({
                 model: "gemini-3-flash-preview",
-                contents: message,
+                contents: requestContents,
                 config: {
-                    // Aqui injetamos o conteúdo lido do SKILL.md
+                    
                     systemInstruction: this.systemInstruction,
                 }
             });
