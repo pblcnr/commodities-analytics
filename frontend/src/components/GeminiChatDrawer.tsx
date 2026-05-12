@@ -12,7 +12,7 @@ interface Message {
 
 export default function GeminiChatDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Olá! Sou seu assistente Gemini. Como posso ajudar com seus dados de commodities hoje?' }
+    { role: 'assistant', content: 'Olá! Sou seu assistente de compras. Como posso ajudar?' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
