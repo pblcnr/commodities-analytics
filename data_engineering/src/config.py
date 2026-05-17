@@ -60,8 +60,11 @@ PRODUCT_ID_MAP: Dict[int, str] = {
 
 # ── Classificação ────────────────────────────────────────────
 CLASSIFICATION_THRESHOLDS: Dict[str, float] = {
-    "bom": 3.0,    # variação > +3%  → bom momento para comprar
-    "ruim": -3.0,  # variação < -3%  → mau momento para comprar
+    # Limiar superior: variacao_pct > bom  → classificação "bom"
+    "bom": 3.0,
+    # Limiar inferior: variacao_pct < ruim → classificação "ruim"
+    # Atenção: valor negativo. Comparar com: variacao < THRESHOLDS["ruim"]
+    "ruim": -3.0,
 }
 
 CLASSIFICATION_LABELS: List[str] = ["ruim", "regular", "bom"]

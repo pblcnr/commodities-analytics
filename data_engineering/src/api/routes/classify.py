@@ -3,6 +3,8 @@
 POST /api/v1/classify — Classifica o momento de compra como bom/regular/ruim.
 """
 
+from datetime import datetime
+
 import numpy as np
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import text
@@ -10,7 +12,10 @@ from sqlalchemy.orm import Session
 
 from src.api.dependencies import get_artifacts, get_db
 from src.api.schemas import ClassifyRequest, ClassifyResponse
-from src.pipeline.predict_pipeline import classify_purchase_moment
+from src.pipeline.predict_pipeline import (
+    build_inference_features,
+    classify_purchase_moment,
+)
 
 router = APIRouter()
 
@@ -79,11 +84,9 @@ def classify(
     ).fetchall()
 
     # Construir features
-    n_features = len(artifacts["feature_columns"])
-    features = np.zeros(n_features)
     prices = [float(row[0]) for row in recent_prices]
-    for i, price in enumerate(prices[:n_features]):
-        features[i] = price
+    reference_date = datetime.now()
+    features = build_inference_features(prices, reference_date)
 
     # Classificar
     resultado = classify_purchase_moment(
