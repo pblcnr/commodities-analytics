@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 
 export interface AlertModel {
   id: string;
@@ -10,37 +11,55 @@ export interface AlertModel {
 
 @Injectable()
 export class AlertsService {
-  private mockAlerts: AlertModel[] = [
-    {
-      id: '1',
-      commodityName: 'Milho',
-      condition: 'Preço cair abaixo de R$ 50,00',
-      channel: 'Telegram',
-      active: true,
-    },
-    {
-      id: '2',
-      commodityName: 'Soja',
-      condition: 'Recomendação mudar para BOM',
-      channel: 'Telegram',
-      active: true,
-    },
-  ];
+  constructor(private readonly prisma: PrismaService) {}
 
-  findAll(): AlertModel[] {
-    return this.mockAlerts;
+  async findAll(): Promise<AlertModel[]> {
+    const alertas = await this.prisma.alerta.findMany({
+      include: {
+        materia_prima: true,
+        usuario: true,
+      },
+    });
+
+    return alertas.map(alerta => ({
+      id: String(alerta.id_alerta),
+      commodityName: alerta.materia_prima?.nome || 'Desconhecida',
+      condition: alerta.valor_limite_opcional 
+        ? `${alerta.tipo_alerta} R$ ${alerta.valor_limite_opcional}` 
+        : alerta.tipo_alerta,
+      channel: alerta.usuario?.canal_notificacao_preferido || 'email',
+      active: alerta.ativo ?? true,
+    }));
   }
 
-  toggleStatus(id: string): AlertModel {
-    const alert = this.mockAlerts.find((a) => a.id === id);
-    if (!alert) {
+  async toggleStatus(id: string): Promise<AlertModel> {
+    const alertId = parseInt(id, 10);
+    const existing = await this.prisma.alerta.findUnique({ where: { id_alerta: alertId } });
+    if (!existing) {
       throw new NotFoundException(`Alerta com id ${id} não encontrado`);
     }
-    alert.active = !alert.active;
-    return alert;
+
+    const updated = await this.prisma.alerta.update({
+      where: { id_alerta: alertId },
+      data: { ativo: !existing.ativo },
+      include: { materia_prima: true, usuario: true }
+    });
+
+    return {
+      id: String(updated.id_alerta),
+      commodityName: updated.materia_prima?.nome || 'Desconhecida',
+      condition: updated.valor_limite_opcional 
+        ? `${updated.tipo_alerta} R$ ${updated.valor_limite_opcional}` 
+        : updated.tipo_alerta,
+      channel: updated.usuario?.canal_notificacao_preferido || 'email',
+      active: updated.ativo ?? true,
+    };
   }
 
-  remove(id: string): void {
-    this.mockAlerts = this.mockAlerts.filter((a) => a.id !== id);
+  async remove(id: string): Promise<void> {
+    const alertId = parseInt(id, 10);
+    await this.prisma.alerta.delete({
+      where: { id_alerta: alertId }
+    });
   }
 }
