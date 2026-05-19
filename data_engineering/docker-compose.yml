@@ -39,5 +39,12 @@ services:
       - MODEL_PATH=/app/artifacts
     restart: unless-stopped
 
+  redis:
+    image: redis:7-alpine
+    container_name: commodities_redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
 volumes:
   pgdata:
