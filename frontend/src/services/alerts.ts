@@ -19,10 +19,15 @@ export async function getAlerts(): Promise<AlertModel[]> {
   });
 }
 
-export async function createAlert(alert: AlertModel): Promise<void> {
-  // O endpoint de criação será implementado quando o banco de dados for adicionado.
-  // Por enquanto retorna uma promessa resolvida como solicitado.
-  return Promise.resolve();
+export interface CreateAlertDto {
+  commodityId: number;
+  condition: 'Abaixo' | 'Acima' | 'bom';
+  targetPrice?: number;
+  channel: 'Telegram' | 'WhatsApp' | 'E-mail';
+}
+
+export async function createAlert(alert: CreateAlertDto): Promise<void> {
+  return apiClient.post('/alerts', alert);
 }
 
 export async function toggleAlertStatus(id: string): Promise<void> {

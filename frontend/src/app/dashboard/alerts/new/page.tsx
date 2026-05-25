@@ -27,30 +27,27 @@ export default function NewAlertPage() {
 
     setIsSubmitting(true);
 
-    let conditionText = "";
-    if (condition === "bom") {
-      conditionText = "Recomendação mudar para BOM";
-    } else {
-      conditionText = `Preço ${condition === 'Acima' ? 'subir acima' : 'cair abaixo'} de R$ ${parseFloat(targetPrice).toFixed(2)}`;
+    try {
+      const newAlert = {
+        commodityId: parseInt(selectedCommodityId, 10),
+        condition: condition as 'Abaixo' | 'Acima' | 'bom',
+        targetPrice: targetPrice ? parseFloat(targetPrice) : undefined,
+        channel: channel as 'Telegram' | 'WhatsApp' | 'E-mail',
+      };
+
+      await createAlert(newAlert);
+      setIsSuccess(true);
+
+      // Reset form
+      setSelectedCommodityId("");
+      setTargetPrice("");
+      setCondition("Abaixo");
+      setChannel("Telegram");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Erro ao criar alerta.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const newAlert = {
-      id: Math.random().toString(),
-      commodityName: comm.name,
-      condition: conditionText,
-      channel,
-      active: true,
-    };
-
-    await createAlert(newAlert);
-    setIsSubmitting(false);
-    setIsSuccess(true);
-
-    // Reset form
-    setSelectedCommodityId("");
-    setTargetPrice("");
-    setCondition("Abaixo");
-    setChannel("Telegram");
   };
 
   const handleCreateAnother = () => {
