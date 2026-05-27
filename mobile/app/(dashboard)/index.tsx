@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#d946ef',
+    color: '#ffffff',
   },
   forecastContainer: {
     flexDirection: 'row',

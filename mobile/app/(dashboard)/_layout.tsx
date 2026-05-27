@@ -33,35 +33,35 @@ export default function DashboardLayout() {
         }}
       />
       <Tabs.Screen
-        name="orders"
+        name="orders/index"
         options={{
           title: 'Compras',
           tabBarIcon: ({ color }) => <ShoppingCart size={24} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="alerts"
+        name="alerts/index"
         options={{
           title: 'Alertas',
           tabBarIcon: ({ color }) => <Bell size={24} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="suppliers"
+        name="suppliers/index"
         options={{
           title: 'Fornecedores',
           tabBarIcon: ({ color }) => <Users size={24} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="assistant"
+        name="assistant/index"
         options={{
           title: 'Assistente',
           tabBarIcon: ({ color }) => <MessageSquare size={24} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="commodities"
+        name="commodities/[id]"
         options={{
           href: null, // Ocultar da tab bar
         }}

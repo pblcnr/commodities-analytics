@@ -59,9 +59,14 @@ export default function AlertsScreen() {
   };
 
   const filteredAlerts = alerts.filter(alert => {
-    if (statusFilter === "ativos" && !alert.active) return false;
-    if (statusFilter === "inativos" && alert.active) return false;
-    if (commodityFilter !== "todas" && alert.commodityName !== commodityFilter) return false;
+    // Normaliza o valor de active (caso venha como string "false", 0, etc da API)
+    const isActive = alert.active === true || alert.active === 'true' || alert.active === 1;
+    
+    if (statusFilter === "ativos" && !isActive) return false;
+    if (statusFilter === "inativos" && isActive) return false;
+    
+    if (commodityFilter !== "todas" && alert.commodityName?.toLowerCase() !== commodityFilter.toLowerCase()) return false;
+    
     return true;
   });
 
@@ -89,7 +94,7 @@ export default function AlertsScreen() {
           <View style={styles.pickerContainer}>
             <Picker
               selectedValue={statusFilter}
-              onValueChange={setStatusFilter}
+              onValueChange={(val) => setStatusFilter(String(val))}
               style={styles.picker}
               dropdownIconColor="#ffffff"
             >
@@ -103,7 +108,7 @@ export default function AlertsScreen() {
           <View style={styles.pickerContainer}>
             <Picker
               selectedValue={commodityFilter}
-              onValueChange={setCommodityFilter}
+              onValueChange={(val) => setCommodityFilter(String(val))}
               style={styles.picker}
               dropdownIconColor="#ffffff"
             >
