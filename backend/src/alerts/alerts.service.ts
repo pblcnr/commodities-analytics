@@ -45,7 +45,7 @@ export class AlertsService {
       commodityId: number;
       condition: 'Abaixo' | 'Acima' | 'bom';
       targetPrice?: number;
-      channel: 'Telegram' | 'WhatsApp' | 'E-mail';
+      channel: 'Telegram' | 'E-mail';
     },
   ): Promise<AlertModel> {
     let tipo_alerta = 'variacao_percentual';

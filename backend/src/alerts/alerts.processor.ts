@@ -2,8 +2,8 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
 import { PrismaService } from '../prisma/prisma.service';
-import { WhatsAppService } from '../integrations/whatsapp.service';
 import { TelegramService } from '../integrations/telegram.service';
+import { EmailService } from '../integrations/email.service';
 
 @Processor('alerts_queue')
 export class AlertsProcessor extends WorkerHost {
@@ -11,8 +11,8 @@ export class AlertsProcessor extends WorkerHost {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly whatsappService: WhatsAppService,
     private readonly telegramService: TelegramService,
+    private readonly emailService: EmailService,
   ) {
     super();
   }
@@ -81,6 +81,7 @@ export class AlertsProcessor extends WorkerHost {
             dispararAlerta = true;
           }
         } else {
+          // TODO: unknown alert type — currently fires unconditionally; define behaviour before adding new types
           dispararAlerta = true;
         }
 
@@ -94,7 +95,8 @@ export class AlertsProcessor extends WorkerHost {
         const limiteFormatado = alerta.valor_limite_opcional
           ? `(Limite: R$ ${Number(alerta.valor_limite_opcional).toFixed(2)})`
           : '';
-        const canal = (alerta.usuario.canal_notificacao_preferido || 'whatsapp').toLowerCase();
+        const canal = (alerta.usuario.canal_notificacao_preferido || 'email').toLowerCase();
+        const titulo = `Alerta: ${alerta.materia_prima.nome}`;
 
         const mensagem =
           `*Alerta de Mercado - ${alerta.materia_prima.nome.toUpperCase()}*\n\n` +
@@ -108,27 +110,28 @@ export class AlertsProcessor extends WorkerHost {
         let statusEnvio = 'enviado';
         let erroEnvio: string | null = null;
 
-        if (!alerta.usuario.telefone_opcional) {
+        if (!alerta.usuario.telefone_opcional && canal !== 'email') {
           statusEnvio = 'falha';
           erroEnvio = 'Usuário não possui telefone/chatId cadastrado no sistema';
           this.logger.warn(`User ${alerta.usuario.nome} lacks phone/chatId. Alert delivery failed.`);
         } else {
           try {
             if (canal === 'telegram') {
-              const success = await this.telegramService.sendMessage(alerta.usuario.telefone_opcional, mensagem);
+              const success = await this.telegramService.sendMessage(alerta.usuario.telefone_opcional!, mensagem);
               if (!success) {
                 statusEnvio = 'falha';
                 erroEnvio = 'Falha no envio da API do Telegram';
               }
-            } else if (canal === 'whatsapp') {
-              const success = await this.whatsappService.sendMessage(alerta.usuario.telefone_opcional, mensagem);
+            } else if (canal === 'email') {
+              const success = await this.emailService.sendMessage(alerta.usuario.email, titulo, mensagem);
               if (!success) {
                 statusEnvio = 'falha';
-                erroEnvio = 'Falha no envio da API do WhatsApp';
+                erroEnvio = 'Falha no envio do email';
               }
             } else {
-              this.logger.log(`Simulation: Sending alert via ${canal} to ${alerta.usuario.email}`);
-              statusEnvio = 'enviado';
+              this.logger.warn(`Canal de notificação desconhecido: ${canal}. Notificação não enviada.`);
+              statusEnvio = 'falha';
+              erroEnvio = `Canal desconhecido: ${canal}`;
             }
           } catch (err) {
             statusEnvio = 'falha';
@@ -136,12 +139,13 @@ export class AlertsProcessor extends WorkerHost {
             this.logger.error(`Error sending message: ${erroEnvio}`);
           }
         }
+
         await this.prisma.notificacao.create({
           data: {
             id_alerta: alerta.id_alerta,
             id_usuario: alerta.id_usuario,
             canal_envio: canal,
-            titulo: `Alerta: ${alerta.materia_prima.nome}`,
+            titulo,
             mensagem: mensagem,
             status_envio: statusEnvio,
             erro_envio_opcional: erroEnvio,
@@ -152,4 +156,3 @@ export class AlertsProcessor extends WorkerHost {
     }
   }
 }
-

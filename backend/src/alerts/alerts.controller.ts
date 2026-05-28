@@ -30,7 +30,7 @@ export class AlertsController {
       commodityId: number;
       condition: 'Abaixo' | 'Acima' | 'bom';
       targetPrice?: number;
-      channel: 'Telegram' | 'WhatsApp' | 'E-mail';
+      channel: 'Telegram' | 'E-mail';
     },
   ) {
     const userId = parseInt(req.user.sub, 10);
