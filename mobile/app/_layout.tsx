@@ -1,17 +1,23 @@
-import { ThemeProvider } from '../src/theme/ThemeContext';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import 'react-native-reanimated';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { AuthProvider } from '../contexts/AuthContext';
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme();
+
   return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="create-alert" options={{ presentation: 'modal', title: 'Novo Alerta' }} />
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <AuthProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="register" />
+          <Stack.Screen name="(dashboard)" />
         </Stack>
-      </ThemeProvider>
-    </SafeAreaProvider>
+      </AuthProvider>
+      <StatusBar style="auto" />
+    </ThemeProvider>
   );
 }
