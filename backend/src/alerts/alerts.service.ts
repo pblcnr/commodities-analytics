@@ -71,7 +71,7 @@ export class AlertsService {
       },
     });
 
-    const canalFormatado = dto.channel.toLowerCase();
+    const canalFormatado = dto.channel.toLowerCase().replace('-', '');
     await this.prisma.usuario.update({
       where: { id_usuario: userId },
       data: { canal_notificacao_preferido: canalFormatado },
