@@ -2,7 +2,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9000/api/v1
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
-  
+
   const headers = {
     'Content-Type': 'application/json',
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -32,14 +32,14 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 }
 
 export const apiClient = {
-  get: <T>(endpoint: string, options?: RequestInit) => 
+  get: <T>(endpoint: string, options?: RequestInit) =>
     request<T>(endpoint, { ...options, method: 'GET' }),
-  post: <T>(endpoint: string, body: unknown, options?: RequestInit) => 
+  post: <T>(endpoint: string, body: unknown, options?: RequestInit) =>
     request<T>(endpoint, { ...options, method: 'POST', body: JSON.stringify(body) }),
-  put: <T>(endpoint: string, body: unknown, options?: RequestInit) => 
+  put: <T>(endpoint: string, body: unknown, options?: RequestInit) =>
     request<T>(endpoint, { ...options, method: 'PUT', body: JSON.stringify(body) }),
-  patch: <T>(endpoint: string, body?: unknown, options?: RequestInit) => 
+  patch: <T>(endpoint: string, body?: unknown, options?: RequestInit) =>
     request<T>(endpoint, { ...options, method: 'PATCH', body: body ? JSON.stringify(body) : undefined }),
-  delete: <T>(endpoint: string, options?: RequestInit) => 
+  delete: <T>(endpoint: string, options?: RequestInit) =>
     request<T>(endpoint, { ...options, method: 'DELETE' }),
 };

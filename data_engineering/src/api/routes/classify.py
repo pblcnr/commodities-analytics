@@ -6,7 +6,7 @@ POST /api/v1/classify — Classifica o momento de compra como bom/regular/ruim.
 from datetime import datetime
 
 import numpy as np
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -16,6 +16,7 @@ from src.pipeline.predict_pipeline import (
     build_inference_features,
     classify_purchase_moment,
 )
+from src.pipeline.messaging import publish_price_alert
 
 router = APIRouter()
 
@@ -28,6 +29,7 @@ router = APIRouter()
 )
 def classify(
     request: ClassifyRequest,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
 ) -> ClassifyResponse:
     """Classifica o momento de compra para a matéria-prima solicitada."""
@@ -114,5 +116,13 @@ def classify(
         },
     )
     db.commit()
+
+    # Publicar alteração de preço na fila de alertas em segundo plano
+    background_tasks.add_task(
+        publish_price_alert,
+        commodity_id=request.id_materia_prima,
+        current_price=resultado["preco_atual"],
+        variation=resultado["variacao_percentual"],
+    )
 
     return ClassifyResponse(**resultado)

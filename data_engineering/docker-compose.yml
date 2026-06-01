@@ -37,6 +37,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - MODEL_PATH=/app/artifacts
+      - REDIS_HOST=redis
     restart: unless-stopped
 
   redis:

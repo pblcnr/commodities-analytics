@@ -10,7 +10,6 @@ interface AuthenticatedRequest extends Request {
 }
 
 @Controller('alerts')
-@UseGuards(JwtAuthGuard)
 export class AlertsController {
   constructor(
     private readonly alertsService: AlertsService,
@@ -18,12 +17,14 @@ export class AlertsController {
   ) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll(@Request() req: AuthenticatedRequest) {
     const userId = parseInt(req.user.sub, 10);
     return this.alertsService.findAll(userId);
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(
     @Request() req: AuthenticatedRequest,
     @Body() body: {
@@ -49,14 +50,17 @@ export class AlertsController {
   }
 
   @Patch(':id/toggle')
+  @UseGuards(JwtAuthGuard)
   toggle(@Param('id') id: string) {
     return this.alertsService.toggleStatus(id);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.alertsService.remove(id);
   }
 }
+
 
 
