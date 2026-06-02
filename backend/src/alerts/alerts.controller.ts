@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Param, Delete, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Delete, Post, Body, UseGuards, Request, HttpCode } from '@nestjs/common';
 import { AlertsService } from './alerts.service';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
@@ -56,6 +56,7 @@ export class AlertsController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.alertsService.remove(id);

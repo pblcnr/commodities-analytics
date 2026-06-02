@@ -120,8 +120,17 @@ export class AlertsService {
 
   async remove(id: string): Promise<void> {
     const alertId = parseInt(id, 10);
+    const existing = await this.prisma.alerta.findUnique({ where: { id_alerta: alertId } });
+    if (!existing) {
+      throw new NotFoundException(`Alerta com id ${id} não encontrado`);
+    }
+
+    await this.prisma.notificacao.deleteMany({
+      where: { id_alerta: alertId },
+    });
+
     await this.prisma.alerta.delete({
-      where: { id_alerta: alertId }
+      where: { id_alerta: alertId },
     });
   }
 }

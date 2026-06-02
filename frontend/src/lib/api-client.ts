@@ -28,7 +28,17 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     throw new Error(errorData.message || 'Erro na requisição');
   }
 
-  return response.json();
+  if (response.status === 204 || response.status === 205) {
+    return undefined as unknown as T;
+  }
+
+  const contentType = response.headers.get('content-type') || '';
+  if (contentType.includes('application/json')) {
+    return response.json();
+  }
+
+  const text = await response.text();
+  return text ? (JSON.parse(text) as T) : (undefined as unknown as T);
 }
 
 export const apiClient = {
