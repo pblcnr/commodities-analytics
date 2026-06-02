@@ -13,8 +13,15 @@ export async function getAlerts(): Promise<AlertModel[]> {
   return response.data;
 }
 
-export async function createAlert(alert: AlertModel): Promise<void> {
-  return Promise.resolve();
+export interface CreateAlertDto {
+  commodityId: number;
+  condition: 'Abaixo' | 'Acima' | 'bom';
+  targetPrice?: number;
+  channel: 'Telegram' | 'E-mail';
+}
+
+export async function createAlert(alert: CreateAlertDto): Promise<void> {
+  await apiClient.post('/alerts', alert);
 }
 
 export async function toggleAlertStatus(id: string): Promise<void> {
