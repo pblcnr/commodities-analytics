@@ -28,14 +28,14 @@ export class EmailService {
     });
   }
 
-  async sendMessage(to: string, subject: string, text: string): Promise<boolean> {
+  async sendMessage(to: string, subject: string, html: string): Promise<boolean> {
     if (!this.transporter) {
       this.logger.warn('Email transporter not initialized. Message not sent.');
       return false;
     }
 
     try {
-      await this.transporter.sendMail({ from: this.from, to, subject, text });
+      await this.transporter.sendMail({ from: this.from, to, subject, html });
       return true;
     } catch (error) {
       this.logger.error(`Failed to send email: ${error instanceof Error ? error.message : 'Unknown error'}`);
