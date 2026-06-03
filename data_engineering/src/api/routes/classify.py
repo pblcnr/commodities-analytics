@@ -16,7 +16,7 @@ from src.pipeline.predict_pipeline import (
     build_inference_features,
     classify_purchase_moment,
 )
-from src.pipeline.messaging import publish_price_alert
+from src.infrastructure.messaging.publisher import publish_price_alert
 
 router = APIRouter()
 

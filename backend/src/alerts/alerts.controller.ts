@@ -25,7 +25,7 @@ export class AlertsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(
+  async create(
     @Request() req: AuthenticatedRequest,
     @Body() body: {
       commodityId: number;
@@ -35,7 +35,14 @@ export class AlertsController {
     },
   ) {
     const userId = parseInt(req.user.sub, 10);
-    return this.alertsService.create(userId, body);
+    const alert = await this.alertsService.create(userId, body);
+
+    await this.alertsQueue.add('price_alert_triggered', {
+      commodity_id: body.commodityId,
+      only_alert_id: parseInt(alert.id, 10),
+    });
+
+    return alert;
   }
 
   @Post('trigger-test-job')

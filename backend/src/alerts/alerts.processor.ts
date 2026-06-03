@@ -4,8 +4,9 @@ import { Job } from 'bullmq';
 
 interface PriceAlertJobData {
   commodity_id: number;
-  current_price: number;
+  current_price?: number;
   variation?: number;
+  only_alert_id?: number;
 }
 import { PrismaService } from '../prisma/prisma.service';
 import { TelegramService } from '../integrations/telegram.service';
@@ -27,7 +28,7 @@ export class AlertsProcessor extends WorkerHost {
     this.logger.log(`Processing job ${job.id} of type ${job.name}`);
 
     if (job.name === 'price_alert_triggered') {
-      const { commodity_id, current_price, variation } = job.data;
+      const { commodity_id, current_price, variation, only_alert_id } = job.data;
 
       this.logger.log(
         `Received price alert trigger for commodity ID ${commodity_id}. Fallback Price = ${current_price}`,
@@ -59,6 +60,7 @@ export class AlertsProcessor extends WorkerHost {
         where: {
           id_materia_prima: commodity_id,
           ativo: true,
+          ...(only_alert_id ? { id_alerta: Number(only_alert_id) } : {}),
         },
         include: {
           usuario: true,

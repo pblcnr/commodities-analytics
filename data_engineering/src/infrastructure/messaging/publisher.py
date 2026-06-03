@@ -8,6 +8,7 @@ REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 queue = Queue("alerts_queue", {"connection": {"host": REDIS_HOST, "port": REDIS_PORT}})
 
 async def publish_price_alert(commodity_id: int, current_price: float, variation: float):
+    """Envia um evento de alteração de preço para a fila do Redis (BullMQ)."""
     job_data = {
         "commodity_id": commodity_id,
         "current_price": current_price,
